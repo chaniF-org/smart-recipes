@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>המועדפים שלי · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div id="content">
+  <div class="page-head">
+    <div><nav class="crumbs" aria-label="פירורי לחם"><a href="index.html">בית</a><span>/</span><span>מועדפים</span></nav>
+      <h1>המועדפים שלי</h1><p>מתכונים ותפריטים ששמרתם, כולל הגרסאות המותאמות עם התחליפים ומספר המנות שבחרתם.</p></div>
+    <div class="tabs" role="tablist" aria-label="סוג">
+      <button role="tab" aria-selected="true" data-tab="recipes">מתכונים · 8</button>
+      <button role="tab" aria-selected="false" data-tab="menus">תפריטים · 3</button>
+      <button role="tab" aria-selected="false" data-tab="history">היסטוריה</button>
+    </div>
+  </div>
+
+  <div id="tab-recipes">
+    <div style="display:flex;justify-content:space-between;gap:var(--s4);flex-wrap:wrap;margin-bottom:var(--s5)">
+      <div class="filters" role="group" aria-label="סינון">
+        <button class="chip-btn" aria-pressed="true" data-f="all">הכול</button>
+        <button class="chip-btn" aria-pressed="false" data-f="meat">בשרי</button>
+        <button class="chip-btn" aria-pressed="false" data-f="dairy">חלבי</button>
+        <button class="chip-btn" aria-pressed="false" data-f="parve">פרווה</button>
+      </div>
+      <div style="display:flex;gap:8px"><input class="input" placeholder="חיפוש במועדפים" style="width:220px" aria-label="חיפוש"><button class="btn btn-soft" id="multiShop">🛒 רשימת קניות מכמה מתכונים</button></div>
+    </div>
+    <div class="grid grid-3" id="favs"></div>
+  </div>
+
+  <div id="tab-menus" hidden><div class="grid grid-3" id="menus"></div></div>
+  <div id="tab-history" hidden>
+    <div class="panel" style="overflow:hidden"><div class="table-wrap"><table class="t"><thead><tr><th>מתכון</th><th>מקור</th><th>כשרות</th><th>נוצר</th><th></th></tr></thead><tbody id="hist"></tbody></table></div></div>
+  </div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+MT.mount('favorites');
+const $=s=>document.querySelector(s);
+const favIds=['r1','r3','r5','r6','r8','r9','r10','r2'];
+const draw=f=>$('#favs').innerHTML=favIds.map(id=>MT.recipes.find(r=>r.id===id)).filter(r=>f==='all'||r.k===f).map(r=>MT.card(r,{fav:true})).join('');
+draw('all');
+document.querySelectorAll('[data-f]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-f]').forEach(x=>x.setAttribute('aria-pressed',x===b));draw(b.dataset.f);}));
+const R=id=>MT.recipes.find(r=>r.id===id);
+const menus=[['תפריט ליל שבת','12 סועדים · בשרי · חגיגית',['r11','r1','r6','r4','r8'],'meat','menu.html'],['סעודה שלישית קלה','6 סועדים · חלבי · קלה',['r2','r12','r10'],'dairy','menu.html'],['סעודת ראש השנה','16 סועדים · בשרי · חגיגית',['r4','r7','r6','r8'],'meat','menu.html']];
+$('#menus').innerHTML=menus.map(m=>`<article class="card menu-card"><div class="plates">${m[2].map(id=>MT.art(R(id))).join('')}</div>
+  <div>${MT.kchip(m[3])}</div><h3>${m[0]}</h3><p class="hint">${m[1]}</p>
+  <div style="display:flex;gap:8px;margin-top:auto"><a class="btn btn-primary btn-sm" href="${m[4]}">פתיחה</a><a class="btn btn-ghost btn-sm" href="menu-planner.html?preset=1">שכפול כבסיס</a></div></article>`).join('');
+$('#hist').innerHTML=MT.recipes.map(r=>`<tr><td><a href="recipe.html?id=${r.id}" style="font-weight:600">${r.e} ${r.title}</a></td><td>${MT.SOURCE[r.src]}</td><td>${MT.kchip(r.k)}</td><td class="hint">${r.ago}</td><td><a class="link" href="recipe.html?id=${r.id}">פתיחה</a></td></tr>`).join('');
+function tab(t){document.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));['recipes','menus','history'].forEach(x=>$('#tab-'+x).hidden=x!==t);}
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>tab(b.dataset.tab)));
+if(MT.qs.get('tab')) tab(MT.qs.get('tab'));
+$('#multiShop').addEventListener('click',()=>MT.toast('בחרו מתכונים בלחיצה ארוכה, ואז "צור רשימה" · <a href="shopping.html">לדוגמה</a>','🛒'));
+</script>
+</body>
+</html>

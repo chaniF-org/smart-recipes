@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ניהול · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div class="admin">
+  <nav class="admin-side" role="tablist" aria-label="מסכי ניהול">
+    <a href="index.html" class="logo" id="lg"></a>
+    <button role="tab" aria-selected="true" data-t="dash">📊 לוח בקרה</button>
+    <button role="tab" aria-selected="false" data-t="ing">🎡 מאגר מצרכים</button>
+    <button role="tab" aria-selected="false" data-t="cui">🔀 טבלת מטבחים</button>
+    <button role="tab" aria-selected="false" data-t="kash">🏷️ מילון כשרות <span class="count">4</span></button>
+    <button role="tab" aria-selected="false" data-t="dept">🛒 מילון מחלקות <span class="count">2</span></button>
+    <button role="tab" aria-selected="false" data-t="quota">⚖️ מכסות שימוש</button>
+    <a href="index.html" style="margin-top:auto;padding:11px 14px;opacity:.7">← חזרה לאתר</a>
+  </nav>
+
+  <main class="admin-main">
+    <!-- Dashboard -->
+    <section class="admin-tab active" id="t-dash">
+      <div class="page-head" style="margin-bottom:var(--s5)"><div><h1>לוח בקרה</h1><p>היום, יום חמישי · עדכון אחרון לפני 2 דקות</p></div>
+        <div class="seg"><input class="neutral" type="radio" name="r" id="r1" checked><label for="r1">היום</label><input class="neutral" type="radio" name="r" id="r2"><label for="r2">7 ימים</label><input class="neutral" type="radio" name="r" id="r3"><label for="r3">30 יום</label></div></div>
+      <div class="kpis">
+        <div class="card kpi"><small>מתכונים שנוצרו</small><b>1,284</b><span class="delta up">▲ 12% מאתמול</span></div>
+        <div class="card kpi"><small>עלות AI משוערת</small><b>$38.40</b><span class="delta">מתוך תקרה של $120</span></div>
+        <div class="card kpi"><small>דחיות כשרות</small><b>1.8%</b><span class="delta up">▼ 0.4% מאתמול</span></div>
+        <div class="card kpi"><small>זמן יצירה ממוצע</small><b>7.2 ש׳</b><span class="delta down">▲ 0.6 ש׳</span></div>
+      </div>
+      <div class="grid" style="grid-template-columns:1.6fr 1fr">
+        <div class="panel" style="padding:var(--s5)">
+          <div style="display:flex;justify-content:space-between;align-items:center"><h3>עלות לפי שעה</h3><div class="legend"><span><i style="background:var(--aubergine-700)"></i>מודל מרכזי</span><span><i style="background:var(--saffron-500)"></i>מודל קטן</span></div></div>
+          <div class="bars" id="bars"></div>
+        </div>
+        <div class="panel" style="padding:var(--s5)">
+          <h3 style="margin-bottom:var(--s4)">קריאות לפי סוג</h3>
+          <div id="types" style="display:flex;flex-direction:column;gap:12px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ingredients -->
+    <section class="admin-tab" id="t-ing">
+      <div class="page-head" style="margin-bottom:var(--s5)"><div><h1>מאגר מצרכים לגלגל</h1><p>42 מצרכים פעילים · נטען ללקוח פעם אחת ונשמר במטמון</p></div><button class="btn btn-primary" data-add>+ מצרך חדש</button></div>
+      <div class="panel" style="overflow:hidden"><div class="table-wrap"><table class="t"><thead><tr><th>אייקון</th><th>שם בעברית</th><th>English</th><th>כשרות</th><th>קטגוריה</th><th>קבוצות התאמה</th><th>פעיל</th></tr></thead><tbody id="ingRows"></tbody></table></div></div>
+    </section>
+
+    <!-- Cuisines -->
+    <section class="admin-tab" id="t-cui">
+      <div class="page-head" style="margin-bottom:var(--s5)"><div><h1>טבלת מטבחים</h1><p>המאפיינים נשלחים למודל עם כל בקשת מיזוג</p></div><button class="btn btn-primary" data-add>+ מטבח חדש</button></div>
+      <div class="cuisines" id="cuiGrid"></div>
+    </section>
+
+    <!-- Kashrut -->
+    <section class="admin-tab" id="t-kash">
+      <div class="page-head" style="margin-bottom:var(--s5)"><div><h1>מילון כשרות</h1><p>המילון גובר על תיוג המודל. מצרכים חדשים ממתינים לאישור.</p></div></div>
+      <div class="notice warn" style="margin-bottom:var(--s4)"><span class="ni">⏳</span><span><b>4 מצרכים ממתינים לבדיקה.</b> הם עברו עם תיוג המודל ונרשמו לבדיקת מנהל.</span></div>
+      <div class="panel" style="overflow:hidden;margin-bottom:var(--s5)"><div class="table-wrap"><table class="t"><thead><tr><th>מונח</th><th>תיוג המודל</th><th>הופיע במתכון</th><th>החלטה</th></tr></thead><tbody id="queue"></tbody></table></div></div>
+      <h3 style="margin-bottom:10px">מונחים מאושרים · 2,318</h3>
+      <div class="panel" style="overflow:hidden"><div class="table-wrap"><table class="t"><thead><tr><th>מונח</th><th>שפה</th><th>סוג</th></tr></thead><tbody>
+        <tr><td>חמאה</td><td>he</td><td><span class="k-chip k-dairy">חלבי</span></td></tr><tr><td>butter</td><td>en</td><td><span class="k-chip k-dairy">חלבי</span></td></tr>
+        <tr><td>שומן אווז</td><td>he</td><td><span class="k-chip k-meat">בשרי</span></td></tr><tr><td>ציר עוף</td><td>he</td><td><span class="k-chip k-meat">בשרי</span></td></tr>
+        <tr><td>חלב קוקוס</td><td>he</td><td><span class="k-chip k-parve">פרווה</span></td></tr></tbody></table></div></div>
+    </section>
+
+    <!-- Departments -->
+    <section class="admin-tab" id="t-dept">
+      <div class="page-head" style="margin-bottom:var(--s5)"><div><h1>מילון מחלקות</h1><p>גררו לשינוי סדר המחלקות ברשימת הקניות</p></div></div>
+      <div class="grid grid-2">
+        <div class="panel" style="padding:var(--s5)"><h3 style="margin-bottom:10px">סדר מחלקות</h3><ol id="deptOrder" style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px"></ol></div>
+        <div class="panel" style="padding:var(--s5)"><h3 style="margin-bottom:10px">סווגו אוטומטית · ממתינים</h3>
+          <div class="item"><span>🫚</span><span class="nm">שורש כורכום טרי</span><span class="tag">ירקות ופירות</span><button class="btn btn-soft btn-sm" data-ok>אישור</button></div>
+          <div class="item"><span>🧂</span><span class="nm">סומאק</span><span class="tag">תבלינים ורטבים</span><button class="btn btn-soft btn-sm" data-ok>אישור</button></div></div>
+      </div>
+    </section>
+
+    <!-- Quotas -->
+    <section class="admin-tab" id="t-quota">
+      <div class="page-head" style="margin-bottom:var(--s5)"><div><h1>מכסות שימוש</h1><p>ערכים יומיים. שינוי נכנס לתוקף מיד, ללא פריסה.</p></div><button class="btn btn-primary" id="saveQ">שמירת שינויים</button></div>
+      <div class="panel" style="overflow:hidden"><table class="t"><thead><tr><th>משאב</th><th>אורח</th><th>משתמש רשום</th></tr></thead><tbody>
+        <tr><td>יצירת מתכונים (כולל המרות)</td><td><input class="input" value="5" style="width:90px"></td><td><input class="input" value="30" style="width:90px"></td></tr>
+        <tr><td>תפריטים</td><td><input class="input" value="1" style="width:90px"></td><td><input class="input" value="5" style="width:90px"></td></tr>
+        <tr><td>הודעות לעוזר</td><td><input class="input" value="20" style="width:90px"></td><td><input class="input" value="100" style="width:90px"></td></tr>
+        <tr><td>בקשות תחליף</td><td><input class="input" value="10" style="width:90px"></td><td><input class="input" value="50" style="width:90px"></td></tr>
+      </tbody></table></div>
+      <div class="panel" style="padding:var(--s5);margin-top:var(--s5);display:flex;gap:var(--s5);align-items:center;flex-wrap:wrap">
+        <div><h3>תקרת עלות יומית</h3><p class="hint">בחריגה נחסמת יצירה חדשה לאורחים בלבד, עד מחר.</p></div>
+        <input class="input" value="$120" style="width:120px;margin-inline-start:auto"></div>
+    </section>
+  </main>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+$('#lg').innerHTML=MT.LOGO+'<span>מטעמים · ניהול</span>';
+document.querySelectorAll('[data-t]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-t]').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.admin-tab').forEach(s=>s.classList.toggle('active',s.id==='t-'+b.dataset.t));}));
+const hrs=['08','09','10','11','12','13','14','15','16','17','18','19'], big=[22,30,46,52,61,48,44,58,70,82,64,40], sm=[6,8,10,12,14,11,9,12,15,18,13,9];
+$('#bars').innerHTML=hrs.map((h,i)=>`<div class="b"><div style="display:flex;gap:3px;width:100%;align-items:flex-end;height:100%"><i style="height:${big[i]}%" title="מודל מרכזי"></i><i class="s" style="height:${sm[i]}%" title="מודל קטן"></i></div><small>${h}</small></div>`).join('');
+const types=[['יצירה מהגלגל',38,'var(--saffron-500)'],['מיזוג מטבחים',21,'var(--aubergine-500)'],['תפריטים',17,'var(--parve)'],['עוזר ניווט',14,'var(--dairy)'],['תחליפים והמרות',10,'var(--meat)']];
+$('#types').innerHTML=types.map(t=>`<div><div style="display:flex;justify-content:space-between;font-size:.9rem"><span>${t[0]}</span><b>${t[1]}%</b></div><div style="height:8px;background:var(--surface-2);border-radius:8px;margin-top:4px"><div style="width:${t[1]*2.4}%;height:100%;background:${t[2]};border-radius:8px"></div></div></div>`).join('');
+const cat={'חלבון':'חלבון','ירק':'ירק','תבלין':'תבלין'};
+$('#ingRows').innerHTML=[...MT.wheel.meat.slice(0,3).map(x=>[...x,'meat']),...MT.wheel.dairy.slice(0,3).map(x=>[...x,'dairy']),...MT.wheel.parve.slice(0,8).map(x=>[...x,'parve'])]
+ .map((x,i)=>`<tr><td style="font-size:1.4rem">${x[0]}</td><td><b>${x[1]}</b></td><td class="hint">${['Chicken legs','Asado','Ground beef','Feta','Cream','Butter','Pumpkin','Sweet potato','Eggplant','Lentils','Mushrooms','Carrot','Almonds','Preserved lemon'][i]||''}</td><td>${MT.kchip(x[3])}</td><td>${x[2]}</td><td><span class="tag">${['ביתי','מזרחי','אפייה'][i%3]}</span> <span class="tag">${['צלייה','קליל'][i%2]}</span></td><td><label class="switch"><input type="checkbox" ${i%7?'checked':''}><span></span></label></td></tr>`).join('');
+$('#cuiGrid').innerHTML=MT.cuisines.map(c=>`<div class="cuisine" style="cursor:default"><span class="flag" style="background:linear-gradient(135deg,hsl(${c.h} 70% 82%),hsl(${c.h+25} 60% 68%))">${c.e}</span><b>${c.n}</b><small>${c.s}</small><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><a class="link" href="#">עריכה</a><label class="switch"><input type="checkbox" checked><span></span></label></div></div>`).join('');
+const q=[['מיסו לבן','parve','רמן תימני בחוויאג׳'],['מרגרינה','parve','עוגת שוקולד פרווה'],['רוטב וורצסטר','parve','טאקו מרוקאי'],['שמנת צמחית','parve','ניוקי דלעת']];
+$('#queue').innerHTML=q.map(x=>`<tr><td><b>${x[0]}</b></td><td>${MT.kchip(x[1])}</td><td><a class="link" href="recipe.html">${x[2]}</a></td><td><select class="select" style="width:auto;padding:6px 10px"><option>פרווה</option><option>בשרי</option><option>חלבי</option></select> <button class="btn btn-soft btn-sm" data-ok>אישור</button></td></tr>`).join('');
+$('#deptOrder').innerHTML=Object.values(MT.shopping).concat([{n:'מוצרי חלב וביצים',i:'🥚'},{n:'קפואים',i:'🧊'}]).map((d,i)=>`<li class="item" draggable="true" style="background:var(--surface-2);cursor:grab"><span>⋮⋮</span><span class="nm">${d.i} ${d.n}</span><span class="hint">${i+1}</span><span></span></li>`).join('');
+document.addEventListener('click',e=>{ if(e.target.closest('[data-ok]')){const r=e.target.closest('tr,.item'); r.style.transition='opacity .3s'; r.style.opacity=0; setTimeout(()=>r.remove(),300); MT.toast('המונח אושר ונוסף למילון','✓');}
+ if(e.target.closest('[data-add]')) MT.toast('טופס הוספה ייפתח כאן','＋'); });
+$('#saveQ').addEventListener('click',()=>MT.toast('המכסות עודכנו','✓'));
+</script>
+</body>
+</html>

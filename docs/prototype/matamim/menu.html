@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>תפריט ליל שבת · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕯️</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div id="content">
+  <nav class="crumbs" aria-label="פירורי לחם"><a href="index.html">בית</a><span>/</span><a href="menu-planner.html">מתכנן תפריט</a><span>/</span><span>ליל שבת</span></nav>
+  <section class="menu-hero">
+    <div style="position:relative;z-index:1">
+      <span class="k-chip k-meat" style="background:#fff">סעודה בשרית</span>
+      <h1 style="margin-top:12px">תפריט ליל שבת</h1>
+      <div class="facts"><span><b>12</b> סועדים</span><span><b>5</b> מנות</span><span>מאמץ: <b>חגיגית</b></span><span>זמן עבודה כולל: <b>כ-3 ש׳</b></span></div>
+    </div>
+    <div style="display:flex;gap:var(--s3);flex-wrap:wrap;position:relative;z-index:1">
+      <button class="btn btn-accent" id="shopAll">🛒 רשימת קניות לכל התפריט</button>
+      <button class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.35)" id="saveMenu">שמירת התפריט</button>
+      <button class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.35)" onclick="window.print()">הדפסה</button>
+    </div>
+  </section>
+
+  <div style="display:grid;grid-template-columns:1fr 360px;gap:var(--s6);align-items:start" class="menu-layout">
+    <div id="courses"></div>
+    <aside class="panel" style="padding:var(--s5);margin-top:var(--s6);position:sticky;top:calc(var(--header-h) + 16px)" aria-labelledby="tlTitle">
+      <h2 id="tlTitle" style="font-size:1.5rem;margin-bottom:var(--s4)">לוח זמני הכנה</h2>
+      <div class="timeline">
+        <div class="tl"><h5>יום לפני</h5><ul>
+          <li>צלי בקר בסילאן ורימונים<span>3 ש׳ 25 ד׳</span></li>
+          <li>חריימה – דג מרוקאי חריף<span>45 ד׳</span></li>
+          <li>עוגת שוקולד פרווה<span>1 ש׳ 5 ד׳</span></li></ul></div>
+        <div class="tl t2"><h5>בבוקר</h5><ul><li>אורז פרסי עם צימוקים ושקדים<span>1 ש׳ 5 ד׳</span></li></ul></div>
+        <div class="tl t3"><h5>לפני ההגשה</h5><ul><li>סלט סלק, תפוזים ואגוזי מלך<span>15 ד׳</span></li></ul></div>
+      </div>
+      <div class="notice" style="margin-top:var(--s2)"><span class="ni">📜</span><span>הלוח הוא הצעה ארגונית בלבד. לשאלות הלכתיות בנוגע לבישול וחימום בשבת יש לפנות לרב.</span></div>
+    </aside>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="shopModal" role="dialog" aria-modal="true" aria-labelledby="smT">
+  <div class="modal"><div class="modal-head"><h3 id="smT">הוספה לרשימת קניות</h3><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="modal-body">
+      <p style="color:var(--muted);margin-bottom:var(--s4)">27 פריטים מ-5 מתכונים, מאוחדים לפי מחלקות. 3 פריטים מסומנים כ"יש לי תמיד בבית".</p>
+      <label class="field"><span>להוסיף אל</span>
+        <select class="select"><option>רשימה חדשה: ליל שבת · 12 סועדים</option><option>שבת פרשת השבוע</option><option>קניות שבועיות</option></select></label>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" data-close>ביטול</button><a class="btn btn-primary" href="shopping.html">הוספה ומעבר לרשימה</a></div></div>
+</div>
+
+<style>@media(max-width:900px){.menu-layout{grid-template-columns:1fr !important}.menu-layout aside{position:static !important}}</style>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+MT.mount('menu');
+const r=id=>MT.recipes.find(x=>x.id===id);
+const C=[['ראשונה',['r11']],['עיקרית',['r1']],['תוספות',['r6','r4']],['קינוח',['r8']]];
+document.getElementById('courses').innerHTML=C.map(([n,ids])=>`<div class="course-block"><h3>${n}</h3><div class="grid grid-2">${ids.map(id=>MT.card({...r(id),serv:12})).join('')}</div></div>`).join('');
+document.getElementById('shopAll').addEventListener('click',()=>MT.modal('shopModal'));
+document.getElementById('saveMenu').addEventListener('click',e=>{e.target.textContent='נשמר ✓';MT.toast('התפריט נשמר <a href="favorites.html?tab=menus">לתפריטים שלי</a>','❤');});
+</script>
+</body>
+</html>

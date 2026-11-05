@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מיזוג מטבחים · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔀</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div id="content">
+  <div class="page-head">
+    <div>
+      <nav class="crumbs" aria-label="פירורי לחם"><a href="index.html">בית</a><span>/</span><span>מיזוג מטבחים</span></nav>
+      <h1>מיזוג מטבחים</h1>
+      <p>גוררים כרטיס של מטבח אחד אל כרטיס של מטבח אחר, או מקישים על שניהם. מקבלים מנה חדשה עם הסבר מה הגיע מכל מטבח.</p>
+    </div>
+  </div>
+
+  <div class="panel" style="padding:var(--s5);display:flex;gap:var(--s6);flex-wrap:wrap;align-items:center;margin-bottom:var(--s5)">
+    <div><div class="label" style="margin-bottom:8px">סוג כשרות</div>
+      <div class="seg" role="radiogroup" aria-label="סוג כשרות">
+        <input type="radio" name="k" id="k1" value="meat" checked><label for="k1"><span class="dot" style="background:var(--meat)"></span>בשרי</label>
+        <input type="radio" name="k" id="k2" value="dairy"><label for="k2"><span class="dot" style="background:var(--dairy)"></span>חלבי</label>
+        <input type="radio" name="k" id="k3" value="parve"><label for="k3"><span class="dot" style="background:var(--parve)"></span>פרווה</label>
+      </div></div>
+    <div><div class="label" style="margin-bottom:8px">סוג מנה</div>
+      <div class="seg" role="radiogroup" aria-label="סוג מנה">
+        <input class="neutral" type="radio" name="t" id="t1" value="starter"><label for="t1">ראשונה</label>
+        <input class="neutral" type="radio" name="t" id="t2" value="main" checked><label for="t2">עיקרית</label>
+        <input class="neutral" type="radio" name="t" id="t3" value="side"><label for="t3">תוספת</label>
+        <input class="neutral" type="radio" name="t" id="t4" value="dessert"><label for="t4">קינוח</label>
+      </div></div>
+  </div>
+
+  <section class="mixer" id="mixer" aria-label="אזור המיזוג">
+    <div class="slotc a" id="slotA"><span class="se">＋</span><span>מטבח ראשון</span></div>
+    <button class="mix-core" id="mix" disabled>מזג!</button>
+    <div class="slotc b" id="slotB"><span class="se">＋</span><span>מטבח שני</span></div>
+  </section>
+
+  <div class="sec-head" style="margin-top:var(--s6)"><div><h2 style="font-size:1.4rem">בחרו שני מטבחים</h2><p>12 מטבחים עדתיים ובינלאומיים, כל אחד עם התבלינים והטכניקות שלו</p></div>
+    <button class="btn btn-ghost btn-sm" id="clear">ניקוי בחירה</button></div>
+  <div class="cuisines" id="cuisines" role="group" aria-label="מטבחים"></div>
+
+  <section class="panel gen" id="result" aria-live="polite" style="margin-top:var(--s6)"></section>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+MT.mount('fusion');
+const $=s=>document.querySelector(s);
+let sel=[];
+$('#cuisines').innerHTML=MT.cuisines.map(c=>`<button class="cuisine" draggable="true" aria-pressed="false" data-id="${c.id}">
+  <span class="badge"></span><span class="flag" style="background:linear-gradient(135deg,hsl(${c.h} 70% 82%),hsl(${c.h+25} 60% 68%))">${c.e}</span>
+  <b>${c.n}</b><small>${c.s}</small></button>`).join('');
+const byId=id=>MT.cuisines.find(c=>c.id===id);
+function sync(){
+  document.querySelectorAll('.cuisine').forEach(b=>{const i=sel.indexOf(b.dataset.id);b.setAttribute('aria-pressed',i>-1);b.querySelector('.badge').textContent=i>-1?(i===0?'א':'ב'):''});
+  ['A','B'].forEach((s,i)=>{const el=$('#slot'+s);const c=sel[i]&&byId(sel[i]);el.classList.toggle('full',!!c);
+    el.innerHTML=c?`<span class="se">${c.e}</span><b>${c.n}</b>`:`<span class="se">＋</span><span>מטבח ${i?'שני':'ראשון'}</span>`;});
+  $('#mix').disabled=sel.length<2; $('#mix').classList.toggle('is-ready',sel.length===2);
+}
+function toggle(id){ const i=sel.indexOf(id); if(i>-1) sel.splice(i,1); else { if(sel.length===2) sel.shift(); sel.push(id);} sync(); }
+$('#cuisines').addEventListener('click',e=>{const b=e.target.closest('.cuisine'); if(b) toggle(b.dataset.id);});
+/* Drag one card onto another */
+let dragId=null;
+$('#cuisines').addEventListener('dragstart',e=>{const b=e.target.closest('.cuisine');dragId=b.dataset.id;e.dataTransfer.effectAllowed='move';});
+$('#cuisines').addEventListener('dragover',e=>{const b=e.target.closest('.cuisine'); if(b&&b.dataset.id!==dragId){e.preventDefault();document.querySelectorAll('.drop-target').forEach(x=>x.classList.remove('drop-target'));b.classList.add('drop-target');}});
+$('#cuisines').addEventListener('drop',e=>{e.preventDefault();const b=e.target.closest('.cuisine');document.querySelectorAll('.drop-target').forEach(x=>x.classList.remove('drop-target'));if(b){sel=[dragId,b.dataset.id];sync();$('#mixer').scrollIntoView({behavior:'smooth',block:'center'});}});
+$('#cuisines').addEventListener('dragend',()=>document.querySelectorAll('.drop-target').forEach(x=>x.classList.remove('drop-target')));
+$('#clear').addEventListener('click',()=>{sel=[];sync();});
+const q=MT.qs; if(q.get('a')&&q.get('b')){sel=[q.get('a'),q.get('b')];sync();MT.toast('העוזר הניח את שני הכרטיסים במקומם','✨');}
+
+const PRESET={
+  title:'פפרדלה בראגו טאג׳ין עם לימון כבוש',
+  desc:'רצועות פסטה רחבות בראגו בקר שהתבשל לאט כמו טאג׳ין, עם כמון, קינמון, לימון כבוש וזיתים ירוקים. נגמר בגרמולטה של כוסברה ולימון במקום פרמזן, כדי לשמור על מנה בשרית.',
+  notes:{a:['תיבול טאג׳ין: כמון, קינמון וג׳ינג׳ר','לימון כבוש וזיתים ירוקים בסוף הבישול','בישול ארוך ואיטי בסיר מכוסה'],b:['פפרדלה טרייה כבסיס','שיטת ראגו: הזהבה, יין ובישול ארוך','גרמולטה טרייה מעל, במקום גבינה']},
+  ing:[['בקר טחון גס','800 גרם'],['פפרדלה','500 גרם'],['בצל','2 יח׳'],['רסק עגבניות','3 כפות'],['לימון כבוש','1 יח׳'],['זיתים ירוקים','½ כוס'],['כמון','1 כפית'],['קינמון','½ כפית'],['כוסברה','1 צרור']],
+  steps:['מזהיבים בצל בשמן זית, מוסיפים את הבקר ומפרקים אותו עד שהוא משחים.','מוסיפים כמון, קינמון ורסק עגבניות, מערבבים דקה ויוצקים 2 כוסות מים.','מבשלים במכסה חצי פתוח כשעה וחצי, ומוסיפים לימון כבוש קצוץ וזיתים ב-15 הדקות האחרונות.','מבשלים את הפפרדלה, מערבבים עם הראגו ומפזרים גרמולטה של כוסברה, גרידת לימון ושום.']
+};
+$('#mix').addEventListener('click',async()=>{
+  const A=byId(sel[0]),B=byId(sel[1]),k=document.querySelector('input[name=k]:checked').value,t=document.querySelector('input[name=t]:checked').value;
+  $('#mixer').classList.add('merging'); $('#mix').classList.remove('is-ready'); $('#mix').textContent='…';
+  await MT.wait(1800); $('#mixer').classList.remove('merging'); $('#mix').textContent='מזג!';
+  const preset = sel.includes('moroccan')&&sel.includes('italian')&&k==='meat';
+  const R = preset?PRESET:{title:`מיזוג ${A.n}־${B.n}: ${MT.DISH[t]} ${MT.KFEM[k]}`,desc:`מנה ${MT.KFEM[k]} שלוקחת את ${A.s.split('·')[0].trim()} מהמטבח ה${A.n}, ופוגשת את ${B.s.split('·')[1].trim()} מהמטבח ה${B.n}.`,
+     notes:{a:A.s.split(/,|·/).map(x=>x.trim()).slice(0,3),b:B.s.split(/,|·/).map(x=>x.trim()).slice(0,3)},ing:PRESET.ing.slice(2,8),steps:PRESET.steps.slice(0,3)};
+  const box=$('#result'); box.classList.add('show');
+  box.innerHTML=`<div class="gen-top"><div>${MT.art({img:preset?'pappardelle':null,e:preset?'🍝':A.e,h:A.h,g:[A.e,B.e],title:R.title})}</div><div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${MT.kchip(k)}<span class="tag">${MT.DISH[t]}</span><span class="tag">${A.e} ${A.n} + ${B.e} ${B.n}</span></div>
+    <h2 id="rt"></h2><p id="rd" style="color:var(--ink-2)"></p></div></div>
+    <div class="contrib"><div class="c"><h5>${A.e} מה הגיע מהמטבח ה${A.n}</h5><ul>${R.notes.a.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+      <div class="c"><h5>${B.e} מה הגיע מהמטבח ה${B.n}</h5><ul>${R.notes.b.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>
+    ${k==='meat'&&sel.includes('italian')?'<div class="notice warn" style="margin-top:var(--s4)"><span class="ni">🔄</span><span>הפרמזן שאופייני למטבח האיטלקי הוחלף בגרמולטה של עשבים, כדי לשמור על מנה בשרית.</span></div>':''}
+    <div class="gen-cols"><div><h4>מצרכים · 6 מנות</h4><ul class="ing-list">${R.ing.map(x=>`<li><span>${x[0]}</span><b>${x[1]}</b></li>`).join('')}</ul></div>
+      <div><h4>אופן ההכנה</h4><ol class="steps-list" id="rs"></ol></div></div>
+    <div style="display:flex;gap:var(--s3);margin-top:var(--s5);flex-wrap:wrap"><a class="btn btn-primary" href="recipe.html?id=r3">פתיחת המתכון המלא</a><a class="btn btn-accent" href="cook.html">👨‍🍳 מצב בישול</a><button class="btn btn-ghost" data-fav>שמירה למועדפים</button><button class="btn btn-ghost" onclick="document.getElementById('mix').click()">מיזוג נוסף</button></div>`;
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+  await MT.stream($('#rt'),R.title,20); await MT.stream($('#rd'),R.desc,5);
+  for(const s of R.steps){const li=document.createElement('li');$('#rs').appendChild(li);await MT.stream(li,s,4);}
+});
+</script>
+</body>
+</html>

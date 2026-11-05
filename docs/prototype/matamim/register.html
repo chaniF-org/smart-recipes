@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>הרשמה · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍲</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div class="auth">
+  <section class="auth-art">
+    <a href="index.html" class="logo" style="color:#fff" id="lg"></a>
+    <div style="position:relative;z-index:1">
+      <p class="bigq">מצטרפים ושומרים כל מנה שאהבתם.</p>
+      <div class="perks">
+        <div><i>❤️</i>שמירת מתכונים ותפריטים, כולל הגרסאות המותאמות</div>
+        <div><i>🛒</i>רשימות קניות שזמינות בכל המכשירים</div>
+        <div><i>✨</i>30 יצירות ביום במקום 5</div>
+      </div>
+    </div>
+    <div class="orbit" aria-hidden="true">
+      <span style="top:-36px;left:50%;transform:translateX(-50%)">🍲</span><span style="top:50%;left:-36px;transform:translateY(-50%)">🥗</span>
+      <span style="top:14%;left:12%">🍰</span><span style="top:40%;left:42%;transform:translate(-50%,-50%)">🎡</span></div>
+  </section>
+  <section class="auth-form">
+    <form id="f" novalidate>
+      <h1>יצירת חשבון</h1>
+      <p class="hint" style="font-size:.95rem">כבר יש לכם חשבון? <a class="link" href="login.html">להתחברות</a></p>
+      <label class="field"><span>שם פרטי</span><input class="input" placeholder="השם שיוצג בחשבון" autocomplete="given-name"></label>
+      <label class="field"><span>אימייל</span><input class="input" type="email" id="em" placeholder="name@example.com" autocomplete="email" required></label>
+      <label class="field"><span>סיסמה</span><input class="input" type="password" id="pw" placeholder="••••••••" autocomplete="new-password" required><span class="hint">לפחות 8 תווים</span></label>
+      <div class="field"><span>סוג כשרות ברירת מחדל</span><div class="seg"><input type="radio" name="k" id="k1" value="meat"><label for="k1"><span class="dot" style="background:var(--meat)"></span>בשרי</label><input type="radio" name="k" id="k2" value="dairy"><label for="k2"><span class="dot" style="background:var(--dairy)"></span>חלבי</label><input type="radio" name="k" id="k3" value="parve" checked><label for="k3"><span class="dot" style="background:var(--parve)"></span>פרווה</label></div></div>
+      <p id="err" class="hint" style="color:var(--err);display:none">נא למלא אימייל תקין וסיסמה של 8 תווים לפחות.</p>
+      <label style="display:flex;gap:8px;align-items:center;font-size:.9rem"><input type="checkbox" checked style="accent-color:var(--aubergine-700)"> אני מסכים לתנאי השימוש ולמדיניות הפרטיות</label>
+      <button class="btn btn-primary btn-lg">יצירת חשבון</button>
+      <div class="divider">או</div>
+      <a class="btn btn-ghost btn-lg" href="index.html">להמשיך כאורח</a>
+      <p class="hint" style="text-align:center">כאורחים אפשר להשתמש בכל הפיצ׳רים, במכסה יומית מצומצמת.</p>
+    </form>
+  </section>
+</div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+document.getElementById('lg').innerHTML=MT.LOGO+'<span>מטעמים</span>';
+document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();
+  const em=document.getElementById('em').value, pw=document.getElementById('pw').value;
+  if(!em.includes('@')||pw.length<4){document.getElementById('err').style.display='block';return;}
+  MT.ls('mt_logged','1'); location.href='index.html';});
+</script>
+</body>
+</html>

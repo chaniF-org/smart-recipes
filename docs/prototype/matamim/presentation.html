@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מטעמים · מפת מסכים להצגה</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍲</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+<style>
+  body{background:var(--aubergine-900);color:#fff}
+  .pz{max-width:1320px;margin:0 auto;padding:56px 32px 96px}
+  .pz-head{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:end;margin-bottom:56px}
+  .pz-head h1{font-size:clamp(2.6rem,2rem + 3vw,5rem);line-height:1;color:#fff}
+  .pz-head p{color:#CFC2DC;font-size:1.12rem;max-width:52ch}
+  .pz-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .pz-meta div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:16px}
+  .pz-meta b{display:block;font-family:var(--font-display);font-size:2rem;color:var(--saffron-200)}
+  .pz-meta span{color:#CFC2DC;font-size:.9rem}
+  .flow{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 40px}
+  .flow a{padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.08);font-size:.9rem;font-weight:600}
+  .flow a:hover{background:var(--saffron-500);color:var(--aubergine-900)}
+  .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  .shot{display:flex;flex-direction:column;gap:12px}
+  .frame{position:relative;border-radius:18px;overflow:hidden;background:#fff;aspect-ratio:16/10;box-shadow:0 30px 60px -30px rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.14)}
+  .frame .bar{height:26px;background:#EFE9F4;display:flex;gap:6px;align-items:center;padding-inline:12px}
+  .frame .bar i{width:9px;height:9px;border-radius:50%;background:#D9CDE4}
+  .frame iframe{position:absolute;top:26px;left:0;width:1440px;height:calc((100% - 26px) / .2778);border:0;transform:scale(.2778);transform-origin:top left;pointer-events:none}
+  .shot:hover .frame{outline:3px solid var(--saffron-500);outline-offset:4px}
+  .shot h3{font-family:var(--font-display);font-size:1.35rem;font-weight:900;color:#fff;display:flex;justify-content:space-between;align-items:baseline}
+  .shot h3 code{font-family:var(--font-ui);font-size:.78rem;color:#B9AAC8;font-weight:500}
+  .shot p{color:#CFC2DC;font-size:.92rem}
+  .mob-row{display:flex;gap:36px;justify-content:center;margin-top:24px;flex-wrap:wrap}
+  .phone{width:250px;height:520px;border-radius:40px;background:#0F0816;padding:10px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7);position:relative}
+  .phone::before{content:"";position:absolute;top:16px;left:50%;transform:translateX(-50%);width:80px;height:20px;border-radius:12px;background:#0F0816;z-index:2}
+  .phone .scr{width:100%;height:100%;border-radius:31px;overflow:hidden;background:#fff;position:relative}
+  .phone iframe{width:390px;height:780px;border:0;transform:scale(.592);transform-origin:top left;position:absolute;top:0;left:0}
+  .phone-cap{text-align:center;margin-top:12px;color:#CFC2DC;font-size:.9rem}
+  .sec-t{font-family:var(--font-display);font-size:2.2rem;font-weight:900;margin:80px 0 8px;color:#fff}
+  .sec-p{color:#CFC2DC;margin-bottom:28px}
+  .docs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .doc{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:8px}
+  .doc:hover{background:rgba(255,255,255,.1)}
+  .doc b{font-size:1.15rem}.doc span{color:#CFC2DC;font-size:.92rem}
+  @media(max-width:1000px){.shots,.docs{grid-template-columns:1fr 1fr}.pz-head{grid-template-columns:1fr}}
+  @media(max-width:640px){.shots,.docs,.pz-meta{grid-template-columns:1fr}.pz{padding:32px 16px}}
+</style>
+</head>
+<body>
+<div class="pz">
+  <header class="pz-head">
+    <div>
+      <a class="logo" href="index.html" style="color:#fff;margin-bottom:28px" id="lg"></a>
+      <h1>מטעמים: אב-טיפוס עיצובי</h1>
+      <p style="margin-top:16px">אתר מתכונים שבו כל מנה נוצרת על ידי AI, דרך משחק וגילוי. כל המסכים כאן לחיצים ומקושרים זה לזה. מומלץ להתחיל מעמוד הבית ולעבור לפי הזרימה.</p>
+    </div>
+    <div class="pz-meta"><div><b>13</b><span>מסכים מעוצבים</span></div><div><b>2</b><span>פריסות: מחשב ומובייל</span></div><div><b>3</b><span>צבעי כשרות קבועים</span></div></div>
+  </header>
+
+  <nav class="flow" aria-label="זרימה מומלצת להצגה">
+    <a href="index.html">1. בית</a><a href="wheel.html">2. גלגל האתגר</a><a href="fusion.html?a=moroccan&b=italian">3. מיזוג מטבחים</a><a href="request.html?q=עוגת יום הולדת שוקולד">4. לפי בקשה</a><a href="pantry.html?preset=1">5. מה יש לי</a><a href="menu-planner.html?preset=1">6. מתכנן תפריט</a><a href="menu.html">7. התפריט</a><a href="recipe.html">8. עמוד מתכון</a><a href="cook.html">9. מצב בישול</a><a href="shopping.html">10. רשימת קניות</a>
+  </nav>
+
+  <div class="shots" id="shots"></div>
+
+  <h2 class="sec-t">במובייל</h2>
+  <p class="sec-p">העוזר עובר לכפתור צף שפותח חלון מלמטה. הניווט עובר לתפריט צד.</p>
+  <div class="mob-row">
+    <div><div class="phone"><div class="scr"><iframe src="index.html" title="בית במובייל" loading="lazy"></iframe></div></div><p class="phone-cap">בית</p></div>
+    <div><div class="phone"><div class="scr"><iframe src="recipe.html" title="מתכון במובייל" loading="lazy"></iframe></div></div><p class="phone-cap">עמוד מתכון</p></div>
+    <div><div class="phone"><div class="scr"><iframe src="cook.html" title="מצב בישול במובייל" loading="lazy"></iframe></div></div><p class="phone-cap">מצב בישול</p></div>
+    <div><div class="phone"><div class="scr"><iframe src="shopping.html" title="רשימת קניות במובייל" loading="lazy"></iframe></div></div><p class="phone-cap">רשימת קניות</p></div>
+  </div>
+
+  <h2 class="sec-t">מסמכים למפתחים</h2>
+  <p class="sec-p">כל מה שצריך כדי לבנות את המסכים ב-React בדיוק כמו באב-הטיפוס.</p>
+  <div class="docs">
+    <a class="doc" href="docs/design-document.html"><b>📘 מסמך עיצוב כללי</b><span>קונספט, צבעים, טיפוגרפיה, רכיבים חיים, תנועה, נגישות, RTL/LTR והנחיות לכל מסך.</span></a>
+    <a class="doc" href="docs/design-tokens.json"><b>🎨 Design Tokens</b><span>קובץ JSON עם כל הצבעים, הגדלים, המרווחים והרדיוסים, מוכן להמרה ל-CSS או Tailwind.</span></a>
+    <a class="doc" href="states.html"><b>🧩 מצבי מערכת</b><span>טעינה בזרימה, דחיית כשרות, מכסה שנגמרה, שגיאת רשת ומסכים ריקים.</span></a>
+  </div>
+</div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+document.getElementById('lg').innerHTML=MT.LOGO+'<span>מטעמים</span>';
+const S=[
+ ['בית','/','index.html','שלושה פיצ׳רים מרכזיים, הדגמת גלגל חיה ומתכונים שנוצרו עכשיו.'],
+ ['גלגל האתגר','/wheel','wheel.html','בחירת כשרות ורמה, גלגל SVG, סיבוב מצרך בודד ויצירה בזרימה.'],
+ ['מיזוג מטבחים','/fusion','fusion.html?a=moroccan&b=italian','גרירת כרטיס אל כרטיס, אנימציית מיזוג והסבר תרומת כל מטבח.'],
+ ['מתכון לפי בקשה','/request','request.html?q=עוגת יום הולדת שוקולד','בקשה חופשית לכל מנה ולכל אירוע, בחירת אירוע, כשרות וקושי, ותיקון המתכון במשפט.'],
+ ['מה יש לי','/pantry','pantry.html?preset=1','כתיבה חופשית של מצרכים, זיהוי לצ׳יפים, הגדרות חוסרים ומתכון עם סימון ✓ / חסר.'],
+ ['מתכנן תפריט','/menu','menu-planner.html?preset=1','טופס סעודה, תוכנית לאישור והחלפת מנה בודדת.'],
+ ['תפריט','/menu/:id','menu.html','כל המנות לפי סדר הגשה, לוח זמני הכנה ורשימת קניות לכל התפריט.'],
+ ['עמוד מתכון','/recipe/:id','recipe.html','בורר מנות, "אין לי", המרת סוג כשרות, שמירה ומצב בישול.'],
+ ['מצב בישול','/recipe/:id/cook','cook.html','מסך מלא, שלב בכל פעם, טיימרים מקבילים והקראה קולית.'],
+ ['רשימות קניות','/shopping','shopping.html','איחוד כמויות לפי מחלקות, סימון, פריט ידני וייצוא.'],
+ ['מועדפים','/favorites','favorites.html','מתכונים, תפריטים והיסטוריה אישית.'],
+ ['התחברות','/login','login.html','אימייל וסיסמה, או המשך כאורח.'],
+ ['הרשמה','/register','register.html','חשבון חדש עם כשרות ברירת מחדל.'],
+ ['ניהול','/admin','admin.html','לוח בקרה, מאגר מצרכים, מטבחים, מילונים ומכסות.'],
+ ['מצבי מערכת','—','states.html','טעינה, שגיאה, מכסה וריקנות.']
+];
+document.getElementById('shots').innerHTML=S.map(s=>`<a class="shot" href="${s[2]}"><div class="frame"><div class="bar"><i></i><i></i><i></i></div><iframe src="${s[2]}" loading="lazy" tabindex="-1" title="${s[0]}"></iframe></div><h3>${s[0]}<code dir="ltr">${s[1]}</code></h3><p>${s[3]}</p></a>`).join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>גלגל האתגר · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎡</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div id="content">
+  <div class="page-head">
+    <div>
+      <nav class="crumbs" aria-label="פירורי לחם"><a href="index.html">בית</a><span>/</span><span>גלגל האתגר</span></nav>
+      <h1>גלגל האתגר</h1>
+      <p>בוחרים סוג כשרות ורמת קושי, מסובבים, ומקבלים שלושה מצרכים. המתכון נוצר רק כשתלחצו על "צור מתכון".</p>
+    </div>
+    <span class="tag">נותרו היום 26 יצירות מתוך 30</span>
+  </div>
+
+  <div class="studio">
+    <aside class="panel controls" aria-label="הגדרות הגלגל">
+      <div>
+        <h3>סוג כשרות</h3>
+        <div class="seg" role="radiogroup" aria-label="סוג כשרות">
+          <input type="radio" name="k" id="k1" value="meat"><label for="k1"><span class="dot" style="background:var(--meat)"></span>בשרי</label>
+          <input type="radio" name="k" id="k2" value="dairy"><label for="k2"><span class="dot" style="background:var(--dairy)"></span>חלבי</label>
+          <input type="radio" name="k" id="k3" value="parve" checked><label for="k3"><span class="dot" style="background:var(--parve)"></span>פרווה</label>
+        </div>
+      </div>
+      <div>
+        <h3>רמת קושי</h3>
+        <div class="diff" role="radiogroup" aria-label="רמת קושי">
+          <input type="radio" name="d" id="d1" value="easy"><label for="d1"><span class="lvl">🙂</span><span><b>קל</b><small>שלושה מצרכים שהולכים יחד. מנה ביתית ומוכרת.</small></span></label>
+          <input type="radio" name="d" id="d2" value="medium" checked><label for="d2"><span class="lvl">🤔</span><span><b>מאתגר</b><small>חלבון, ירק ותבלין מקטגוריות שונות.</small></span></label>
+          <input type="radio" name="d" id="d3" value="hard"><label for="d3"><span class="lvl">🤯</span><span><b>מטורף</b><small>כל שילוב אפשרי. עדיין טעים, מבטיחים.</small></span></label>
+        </div>
+      </div>
+      <div class="notice"><span class="ni">💡</span><span>אפשר לסובב מחדש מצרך בודד בלחיצה על ⟳ שליד המצרך.</span></div>
+    </aside>
+
+    <div>
+      <section class="panel stage" aria-label="הגלגל">
+        <div class="wheel-wrap">
+          <svg class="wheel-pointer" viewBox="0 0 44 54" aria-hidden="true"><path d="M22 52L4 16A18 18 0 1 1 40 16Z" fill="#2C1840"/><circle cx="22" cy="18" r="7" fill="#F2A922"/></svg>
+          <svg class="wheel-svg" id="wheel" viewBox="-110 -110 220 220" role="img" aria-label="גלגל מצרכים"></svg>
+          <button class="wheel-hub" id="hub" aria-label="סובבו את הגלגל">סובבו</button>
+        </div>
+        <div class="picks" id="picks" aria-live="polite">
+          <div class="pick"><span class="num">1</span><span class="pe">?</span><small>מצרך ראשון</small></div>
+          <div class="pick"><span class="num">2</span><span class="pe">?</span><small>מצרך שני</small></div>
+          <div class="pick"><span class="num">3</span><span class="pe">?</span><small>מצרך שלישי</small></div>
+        </div>
+        <button class="btn btn-primary btn-lg" id="gen" disabled>✨ צור מתכון</button>
+      </section>
+
+      <section class="panel gen" id="genBox" aria-live="polite">
+        <div class="gen-top">
+          <div id="genArt"><div class="art sk" style="aspect-ratio:4/3;border-radius:18px"></div></div>
+          <div>
+            <div id="genChips" style="display:flex;gap:6px"><span class="sk" style="width:60px;height:24px;display:inline-block"></span><span class="sk" style="width:60px;height:24px;display:inline-block"></span></div>
+            <h2 id="genTitle"><span class="sk" style="display:block;height:38px;width:80%"></span></h2>
+            <p id="genDesc" style="color:var(--ink-2)"><span class="loading-line"><span class="spinner"></span><span id="loadMsg">בוחרים שיטת בישול…</span></span></p>
+          </div>
+        </div>
+        <div class="gen-cols">
+          <div><h4>מצרכים</h4><ul class="ing-list" id="genIng"><li><span class="sk" style="height:16px;width:70%"></span></li><li><span class="sk" style="height:16px;width:55%"></span></li><li><span class="sk" style="height:16px;width:62%"></span></li></ul></div>
+          <div><h4>אופן ההכנה</h4><ol class="steps-list" id="genSteps"><li><span class="sk" style="display:block;height:16px;width:90%"></span></li><li><span class="sk" style="display:block;height:16px;width:75%"></span></li></ol></div>
+        </div>
+        <div id="genFoot" style="display:none;margin-top:var(--s5);gap:var(--s3);flex-wrap:wrap;align-items:center">
+          <a href="recipe.html?id=r7" class="btn btn-primary">פתיחת המתכון המלא</a>
+          <a href="cook.html" class="btn btn-accent">👨‍🍳 מצב בישול</a>
+          <button class="btn btn-ghost" data-fav>שמירה למועדפים</button>
+          <button class="btn btn-ghost" id="again">סיבוב חדש</button>
+          <span class="hint" style="margin-inline-start:auto">✓ עבר בדיקת כשרות בשרת</span>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+MT.mount('wheel');
+const $=s=>document.querySelector(s);
+const presets={
+  meat:{img:'r7',picks:[['🍗','כרעי עוף','חלבון'],['🌴','תמרים','מתוק'],['🟡','כורכום','תבלין']], e:'🍗',h:32,g:['🌴','🌿'],
+    title:'כרעי עוף צלויות בכורכום, תמרים ובצל', desc:'כרעיים זהובות שנצלות על מצע בצל ותמרים מג׳הול, עם רוטב כורכום ולימון שמתקרמל בתנור.',
+    ing:[['כרעי עוף','6 יח׳'],['תמרים מג׳הול','10 יח׳'],['כורכום','1 כפית'],['בצל','2 יח׳'],['לימון','1 יח׳'],['שמן זית','3 כפות']],
+    steps:['מחממים תנור ל-200 מעלות ומערבבים את הכורכום עם שמן, מיץ לימון ומלח.','מורחים את התערובת על הכרעיים ומניחים על מצע בצל פרוס ותמרים חצויים.','צולים שעה, עד שהעור שחום והתמרים מתקרמלים. מגישים עם הרוטב מהתבנית.']},
+  dairy:{img:'r12',picks:[['🧀','גבינת פטה','גבינה'],['🎃','דלעת','ירק'],['🌿','זעתר','תבלין']], e:'🥧',h:34,g:['🎃','🌿'],
+    title:'פשטידת דלעת, פטה וזעתר', desc:'פשטידה כתומה ועסיסית עם קוביות דלעת צלויה, פטה מלוחה וזעתר טרי מעל.',
+    ing:[['דלעת קלופה','800 גרם'],['גבינת פטה','200 גרם'],['ביצים','4 יח׳'],['שמנת מתוקה','1 כוס'],['זעתר טרי','3 כפות'],['קמח','3 כפות']],
+    steps:['צולים קוביות דלעת עם שמן זית ב-200 מעלות כ-25 דקות.','טורפים ביצים, שמנת וקמח, ומוסיפים פטה מפוררת ואת הדלעת.','יוצקים לתבנית, מפזרים זעתר ואופים 40 דקות עד להזהבה.']},
+  parve:{img:'eggplant',picks:[['🍆','חציל','ירק'],['🍋','לימון כבוש','חמיצות'],['🌰','שקדים','אגוז']], e:'🍆',h:280,g:['🍋','🌰'],
+    title:'חציל שרוף עם לימון כבוש ופרורי שקדים', desc:'חציל שלם שנשרף על הלהבה, נפתח לכריות רכות ומעושנות, ומקבל רוטב לימון כבוש ושקדים פריכים.',
+    ing:[['חצילים','2 יח׳'],['לימון כבוש קצוץ','2 כפות'],['שקדים קלויים','½ כוס'],['שמן זית','¼ כוס'],['שום','1 שן'],['פטרוזיליה','½ צרור']],
+    steps:['שורפים את החצילים על להבה גלויה, מסובבים עד שכל הקליפה שחורה והבשר רך.','מערבבים לימון כבוש, שום כתוש ושמן זית לרוטב.','פותחים את החצילים, יוצקים את הרוטב ומפזרים שקדים קצוצים ופטרוזיליה.']}
+};
+const p=MT.qs; if(p.get('k')) document.querySelector(`input[name=k][value=${p.get('k')}]`).checked=true;
+if(p.get('d')) document.querySelector(`input[name=d][value=${p.get('d')}]`).checked=true;
+if(p.get('k')||p.get('d')){ $('#hub').classList.add('is-ready'); MT.toast('העוזר הכין את הגלגל עם ההגדרות שביקשתם','✨'); }
+
+const kind=()=>document.querySelector('input[name=k]:checked').value;
+function pool(){ const k=kind(); return k==='parve'?MT.wheel.parve:[...MT.wheel[k],...MT.wheel.parve]; }
+function drawWheel(){
+  const items=pool().slice(0,12); const n=items.length, R=100;
+  const kc={meat:'#B3263E',dairy:'#2463B0',parve:'#25744A'}[kind()];
+  const cols=['#2C1840',kc,'#F2A922','#3D2352'];
+  let s='';
+  items.forEach((it,i)=>{
+    const a0=(i/n)*2*Math.PI-Math.PI/2, a1=((i+1)/n)*2*Math.PI-Math.PI/2, am=(a0+a1)/2;
+    const x0=R*Math.cos(a0),y0=R*Math.sin(a0),x1=R*Math.cos(a1),y1=R*Math.sin(a1);
+    s+=`<path d="M0 0L${x0} ${y0}A${R} ${R} 0 0 1 ${x1} ${y1}Z" fill="${cols[i%4]}" stroke="#fff" stroke-width="1.5"/>`;
+    s+=`<text x="${70*Math.cos(am)}" y="${70*Math.sin(am)}" font-size="17" text-anchor="middle" dominant-baseline="central" transform="rotate(${am*180/Math.PI+90} ${70*Math.cos(am)} ${70*Math.sin(am)})">${it[0]}</text>`;
+  });
+  s+=`<circle r="${R}" fill="none" stroke="#fff" stroke-width="5"/>`;
+  for(let i=0;i<24;i++){const a=i/24*2*Math.PI;s+=`<circle cx="${104*Math.cos(a)}" cy="${104*Math.sin(a)}" r="2.6" fill="${i%2?'#F2A922':'#fff'}"/>`}
+  $('#wheel').innerHTML=`<circle r="108" fill="#1E1029"/>`+s;
+}
+drawWheel();
+document.querySelectorAll('input[name=k]').forEach(r=>r.addEventListener('change',()=>{drawWheel();reset();}));
+
+let rot=0, current=[];
+function reset(){ current=[]; $('#gen').disabled=true; $('#picks').innerHTML=[1,2,3].map(i=>`<div class="pick"><span class="num">${i}</span><span class="pe">?</span><small>מצרך ${['ראשון','שני','שלישי'][i-1]}</small></div>`).join(''); }
+function pickHTML(it,i){ return `<div class="pick filled"><span class="num">${i+1}</span><button class="reroll" aria-label="סיבוב מחדש של ${it[1]}" data-i="${i}">${MT.I.reroll}</button><span class="pe">${it[0]}</span><b>${it[1]}</b><small>${it[2]}</small></div>`; }
+async function spin(){
+  $('#hub').classList.remove('is-ready'); $('#genBox').classList.remove('show');
+  reset(); rot+=1440+Math.random()*360; $('#wheel').style.transform=`rotate(${rot}deg)`;
+  await MT.wait(3200);
+  current=presets[kind()].picks.slice(); const box=$('#picks');
+  for(let i=0;i<3;i++){ box.children[i].outerHTML=pickHTML(current[i],i); await MT.wait(380); }
+  $('#gen').disabled=false; $('#gen').classList.add('is-ready');
+}
+$('#hub').addEventListener('click',spin);
+$('#picks').addEventListener('click',e=>{
+  const b=e.target.closest('.reroll'); if(!b) return; const i=+b.dataset.i;
+  const opts=pool().filter(x=>!current.some(c=>c[1]===x[1])); current[i]=opts[Math.floor(Math.random()*opts.length)];
+  $('#picks').children[i].outerHTML=pickHTML(current[i],i); MT.toast(`המצרך הוחלף ל${current[i][1]}`,'⟳');
+});
+const msgs=['בוחרים שיטת בישול…','מאזנים טעמים…','בודקים כשרות…'];
+$('#gen').addEventListener('click',async()=>{
+  const k=kind(), pr=presets[k], custom=current.some((c,i)=>c[1]!==pr.picks[i][1]);
+  const R = custom ? {...pr, img:null, title:`${current[0][1]} עם ${current[1][1]} ו${current[2][1]}`, desc:`מנה ${MT.KFEM[k]} שמחברת ${current.map(c=>c[1]).join(', ')} לשילוב מפתיע ומאוזן.`, e:current[0][0],
+    ing:[...current.map(c=>[c[1],({'חלבון':'600 גרם','ירק':'2 יח׳','תבלין':'1 כפית','גבינה':'150 גרם','חלב':'1 כוס','קטניה':'1 כוס','אגוז':'½ כוס','רוטב':'2 כפות','מתוק':'3 כפות','חמיצות':'1 יח׳','פרי':'2 יח׳'})[c[2]]||'לפי הטעם']),['בצל','1 יח׳'],['שמן זית','2 כפות'],['מלח ופלפל','לפי הטעם']],
+    steps:[`מכינים את ה${current[0][1]}: חותכים לנתחים אחידים ומתבלים במלח, פלפל ושמן זית.`,`מטגנים בצל עד שהוא מזהיב, מוסיפים את ה${current[1][1]} ומבשלים עד שהוא מתרכך.`,`מוסיפים את ה${current[2][1]}, מערבבים היטב ומבשלים עוד כמה דקות עד שהטעמים מתחברים. מגישים חם.`]} : pr;
+  $('#gen').classList.remove('is-ready'); $('#gen').disabled=true;
+  const box=$('#genBox'); box.classList.add('show'); box.scrollIntoView({behavior:'smooth',block:'start'});
+  let mi=0; const iv=setInterval(()=>{const l=$('#loadMsg'); if(l) l.textContent=msgs[++mi%3]},700);
+  await MT.wait(1600); clearInterval(iv);
+  $('#genArt').innerHTML=MT.art({...R,title:R.title});
+  $('#genChips').innerHTML=MT.kchip(k)+`<span class="tag">עיקרית</span><span class="tag">${MT.DIFF[document.querySelector('input[name=d]:checked').value]}</span>`;
+  $('#genTitle').textContent=''; await MT.stream($('#genTitle'),R.title,18);
+  await MT.stream($('#genDesc'),R.desc,6);
+  $('#genIng').innerHTML=''; for(const x of R.ing){ $('#genIng').insertAdjacentHTML('beforeend',`<li style="animation:pop .3s"><span>${x[0]}</span><b>${x[1]}</b></li>`); await MT.wait(120); }
+  $('#genSteps').innerHTML=''; for(const s of R.steps){ const li=document.createElement('li'); $('#genSteps').appendChild(li); await MT.stream(li,s,4); }
+  $('#genFoot').style.display='flex'; $('#gen').disabled=false;
+});
+$('#again').addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'});spin();});
+</script>
+</body>
+</html>

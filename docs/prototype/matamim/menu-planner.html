@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מתכנן תפריט שבת וחג · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕯️</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div id="content">
+  <div class="page-head">
+    <div>
+      <nav class="crumbs" aria-label="פירורי לחם"><a href="index.html">בית</a><span>/</span><span>מתכנן תפריט</span></nav>
+      <h1>מתכנן תפריט שבת וחג</h1>
+      <p>ממלאים את פרטי הסעודה ומקבלים תוכנית תפריט לאישור. אפשר להחליף כל מנה לפני שיוצרים את המתכונים.</p>
+    </div>
+  </div>
+
+  <div class="planner">
+    <form class="panel controls" id="planForm" aria-label="פרטי הסעודה" onsubmit="return false">
+      <div>
+        <h3>סוג הסעודה</h3>
+        <div class="meal-types">
+          <input type="radio" name="meal" id="m1" value="fri" checked><label for="m1"><span class="mi">🕯️</span><b>ליל שבת</b></label>
+          <input type="radio" name="meal" id="m2" value="sat"><label for="m2"><span class="mi">☀️</span><b>יום שבת</b></label>
+          <input type="radio" name="meal" id="m3" value="third"><label for="m3"><span class="mi">🌇</span><b>סעודה שלישית</b></label>
+          <input type="radio" name="meal" id="m4" value="hag"><label for="m4"><span class="mi">🍷</span><b>סעודת חג</b></label>
+        </div>
+        <select class="select" id="hag" style="margin-top:8px;display:none" aria-label="בחירת החג"><option>ראש השנה</option><option>סוכות</option><option>שבועות</option><option>חנוכה</option><option>פורים</option></select>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <div><h3 style="margin:0">מספר סועדים</h3><span class="hint">בין 2 ל-40</span></div>
+        <div class="stepper"><button type="button" data-d="1" aria-label="הוספת סועד">+</button><output id="diners">8</output><button type="button" data-d="-1" aria-label="הפחתת סועד">−</button></div>
+      </div>
+      <div>
+        <h3>סוג כשרות של הסעודה</h3>
+        <div class="seg" role="radiogroup" aria-label="סוג כשרות">
+          <input type="radio" name="k" id="k1" value="meat" checked><label for="k1"><span class="dot" style="background:var(--meat)"></span>בשרי</label>
+          <input type="radio" name="k" id="k2" value="dairy"><label for="k2"><span class="dot" style="background:var(--dairy)"></span>חלבי</label>
+          <input type="radio" name="k" id="k3" value="parve"><label for="k3"><span class="dot" style="background:var(--parve)"></span>פרווה</label>
+        </div>
+        <p class="hint" style="margin-top:6px">בסעודה בשרית יוצעו מנות בשריות ופרווה בלבד.</p>
+      </div>
+      <div>
+        <h3>מבנה התפריט</h3>
+        <div class="courses" id="courses"></div>
+        <button type="button" class="btn btn-soft btn-sm" style="margin-top:8px" id="addCourse">+ הוספת מנה</button>
+      </div>
+      <div>
+        <h3>רמת מאמץ</h3>
+        <div class="seg" role="radiogroup" aria-label="רמת מאמץ">
+          <input class="neutral" type="radio" name="e" id="e1" value="light"><label for="e1">קלה</label>
+          <input class="neutral" type="radio" name="e" id="e2" value="mid" checked><label for="e2">בינונית</label>
+          <input class="neutral" type="radio" name="e" id="e3" value="fest"><label for="e3">חגיגית</label>
+        </div>
+      </div>
+      <label class="field"><span>הערות (לא חובה)</span>
+        <textarea class="textarea" id="notes" rows="2" maxlength="200" placeholder="למשל: בלי אגוזים, יש ילדים קטנים"></textarea>
+        <span class="hint" id="cnt">0/200</span></label>
+      <button type="button" class="btn btn-primary btn-lg" id="build">🕯️ בנה תפריט</button>
+    </form>
+
+    <section aria-live="polite">
+      <div id="planEmpty" class="panel state">
+        <span class="si">🍽️</span><h3>התפריט יופיע כאן</h3>
+        <p>מלאו את פרטי הסעודה ולחצו על "בנה תפריט". תקבלו תוכנית מאוזנת: ראשונה, עיקרית, תוספות וקינוח.</p>
+      </div>
+      <div id="plan" style="display:none">
+        <div class="sec-head"><div><h2 id="planTitle">תוכנית לליל שבת · 8 סועדים</h2><p>כל המנות תואמות לסעודה בשרית</p></div><span class="k-chip k-meat" id="planK">בשרי</span></div>
+        <div class="plan-list" id="planList"></div>
+        <div class="balance" style="margin-top:var(--s4)" id="balance"><span>⚖️</span><span></span></div>
+        <div style="display:flex;gap:var(--s3);margin-top:var(--s5);flex-wrap:wrap;align-items:center">
+          <button class="btn btn-accent btn-lg" id="create">✨ צור מתכונים לכל המנות</button>
+          <span class="hint">5 מתכונים ייווצרו במקביל, בכמויות ל-<b id="dn2">8</b> סועדים</span>
+        </div>
+        <div class="notice" style="margin-top:var(--s5)"><span class="ni">📜</span><span>לוח זמני ההכנה הוא הצעה ארגונית בלבד. לשאלות הלכתיות בנוגע לבישול וחימום בשבת ובחג יש לפנות לרב.</span></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+MT.mount('menu');
+const $=s=>document.querySelector(s);
+let diners=8, courses=['ראשונה','עיקרית','תוספת','תוספת','קינוח'];
+const renderCourses=()=>$('#courses').innerHTML=courses.map((c,i)=>`<span class="course-chip">${c}<button type="button" aria-label="הסרת ${c}" data-rm="${i}">✕</button></span>`).join('');
+renderCourses();
+$('#courses').addEventListener('click',e=>{const b=e.target.closest('[data-rm]'); if(b){courses.splice(+b.dataset.rm,1);renderCourses();}});
+$('#addCourse').addEventListener('click',()=>{courses.push('תוספת');renderCourses();});
+document.querySelectorAll('.stepper button').forEach(b=>b.addEventListener('click',()=>{diners=Math.min(40,Math.max(2,diners+ +b.dataset.d));$('#diners').textContent=diners;}));
+document.querySelectorAll('input[name=meal]').forEach(r=>r.addEventListener('change',()=>$('#hag').style.display=$('#m4').checked?'block':'none'));
+$('#notes').addEventListener('input',e=>$('#cnt').textContent=e.target.value.length+'/200');
+
+if(MT.qs.get('preset')){ diners=12; $('#diners').textContent=12; $('#e3').checked=true; $('#build').classList.add('is-ready'); MT.toast('העוזר מילא את הטופס: ליל שבת, 12 סועדים, בשרי','✨'); }
+
+const PLAN=[
+  {c:'ראשונה', r:'r11', t:'חריימה – דג מרוקאי חריף', d:'נתחי דג לבן ברוטב פלפלים אדומים ושום', k:'parve', ma:'יום לפני'},
+  {c:'עיקרית', r:'r1', t:'צלי בקר בסילאן ורימונים', d:'צלי כתף בבישול איטי, בצל סגול מקורמל', k:'meat', ma:'יום לפני'},
+  {c:'תוספת', r:'r6', t:'אורז פרסי עם צימוקים ושקדים', d:'אורז בסמטי עם תחדיג ופרורי זעפרן', k:'parve', ma:'בבוקר'},
+  {c:'תוספת', r:'r4', t:'סלט סלק, תפוזים ואגוזי מלך', d:'סלט ירקות רענן לאיזון המנות החמות', k:'parve', ma:'לפני ההגשה'},
+  {c:'קינוח', r:'r8', t:'עוגת שוקולד פרווה עם פקאנים', d:'עוגה לחה בשמן, קקאו מריר וקרמל פקאנים', k:'parve', ma:'יום לפני'}
+];
+const ALTS={
+  'ראשונה':[{e:'🥟',h:22,t:'כובה סלק עיראקית',d:'כיסוני סולת במרק סלק חמצמץ',k:'meat'},{e:'🍆',h:280,t:'חציל שרוף עם לימון כבוש',d:'חציל מעושן, רוטב לימון ושקדים',k:'parve'}],
+  'עיקרית':[{e:'🍗',h:28,t:'עוף בתנור עם הדרים וזעתר',d:'כרעיים פריכות על מצע תפוזים',k:'meat'}],
+  'תוספת':[{e:'🥔',h:40,t:'קוגל תפוחי אדמה פריך',d:'קוגל אשכנזי עם בצל מטוגן',k:'parve'},{e:'🫛',h:110,t:'שעועית ירוקה בשום ושקדים',d:'שעועית פריכה בשמן זית',k:'parve'}],
+  'קינוח':[{e:'🍐',h:60,t:'אגסים ביין אדום ותבלינים',d:'אגסים שלמים בסירופ קינמון',k:'parve'}]
+};
+const rec=id=>MT.recipes.find(r=>r.id===id);
+function item(p,i){ const r=p.r?rec(p.r):p; return `<article class="card plan-item" style="animation-delay:${i*.08}s" data-i="${i}">
+  ${MT.art({...r,g:[],title:p.t})}
+  <div><span class="course">${p.c}</span><h4>${p.t}</h4><p>${p.d}</p>
+  <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">${MT.kchip(p.k)}<span class="tag">🕒 ${p.ma}</span></div></div>
+  <div class="side"><button class="btn btn-ghost btn-sm" data-alt="${i}">${MT.I.reroll} הצע מנה אחרת</button></div></article>`; }
+let plan=[];
+$('#build').addEventListener('click',async()=>{
+  $('#build').classList.remove('is-ready'); $('#planEmpty').style.display='none'; $('#plan').style.display='block';
+  const meal=document.querySelector('input[name=meal]:checked').nextElementSibling.querySelector('b').textContent.trim();
+  $('#planTitle').textContent=`תוכנית ל${meal} · ${diners} סועדים`; $('#dn2').textContent=diners;
+  plan=PLAN.map(x=>({...x})); $('#planList').innerHTML='';
+  for(let i=0;i<plan.length;i++){ $('#planList').insertAdjacentHTML('beforeend',`<div class="card plan-item"><div class="sk" style="aspect-ratio:1;border-radius:14px"></div><div><span class="sk" style="display:block;height:12px;width:60px"></span><span class="sk" style="display:block;height:22px;width:70%;margin-top:8px"></span></div></div>`); }
+  for(let i=0;i<plan.length;i++){ await MT.wait(420); $('#planList').children[i].outerHTML=item(plan[i],i); }
+  $('#balance span:last-child').textContent='איזון: ראשונה קלה מדג, עיקרית בבישול ארוך, תוספת ירקית אחת לפחות, ושיטות בישול מגוונות (אפייה, צלייה, בישול ותוספת קרה).';
+});
+const altIdx={};
+$('#planList').addEventListener('click',async e=>{
+  const b=e.target.closest('[data-alt]'); if(!b) return; const i=+b.dataset.alt; const c=plan[i].c;
+  const opts=ALTS[c]||[]; altIdx[c]=((altIdx[c]??-1)+1)%opts.length; const a=opts[altIdx[c]];
+  const el=$('#planList').children[i]; el.style.opacity=.4; b.innerHTML='<span class="spinner"></span> מחפש…';
+  await MT.wait(900);
+  plan[i]={c, t:a.t, d:a.d, k:a.k, ma:plan[i].ma, e:a.e, h:a.h}; el.outerHTML=item(plan[i],i);
+  MT.toast(`המנה הוחלפה: ${a.t}`,'⟳');
+});
+$('#create').addEventListener('click',async()=>{
+  const btn=$('#create'); btn.disabled=true;
+  const items=[...$('#planList').children];
+  items.forEach(el=>{const s=el.querySelector('.side');s.innerHTML='<span class="loading-line" style="font-size:.85rem"><span class="spinner"></span>יוצר מתכון…</span>';});
+  for(let i=0;i<items.length;i++){ await MT.wait(450+Math.random()*500); items[i].querySelector('.side').innerHTML='<span class="k-chip k-parve" style="--x:0">נוצר ✓</span>'; }
+  btn.innerHTML='פותח את התפריט…'; await MT.wait(600); location.href='menu.html';
+});
+</script>
+</body>
+</html>

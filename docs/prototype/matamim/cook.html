@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מצב בישול · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍🍳</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="cook-body">
+<div class="cook">
+  <header class="cook-top">
+    <a class="cbtn" id="exit" href="recipe.html" aria-label="יציאה ממצב בישול">✕ יציאה</a>
+    <div class="ttl" id="ttl"></div>
+    <div class="right">
+      <span class="wake" id="wake">המסך יישאר דלוק</span>
+      <button class="cbtn" id="auto" aria-pressed="false">🔊 הקראה אוטומטית</button>
+    </div>
+  </header>
+  <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+
+  <main class="cook-main" id="main">
+    <section class="cook-step" id="step" aria-live="polite"></section>
+    <aside class="cook-side" id="side"></aside>
+  </main>
+
+  <footer class="cook-foot">
+    <button class="nav-btn prev" id="prev">→ הקודם</button>
+    <div class="timers" id="timers" aria-live="polite"></div>
+    <label class="speed">מהירות דיבור <input type="range" id="rate" min="0.75" max="1.25" step="0.05" value="1"><output id="rateV">1.0</output></label>
+    <button class="nav-btn next" id="next">הבא ←</button>
+  </footer>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const RID=MT.qs.get('id')||'r1'; const R=MT.build(RID);
+const serv=+(MT.qs.get('servings')||R.serv), ratio=serv/R.serv;
+let i=Math.max(0,(+MT.qs.get('step')||1)-1), auto=false, timers=[];
+$('#ttl').innerHTML=`${R.title}<small>${serv} מנות · ${R.steps.length} שלבים</small>`;
+$('#exit').href=`recipe.html?id=${RID}&servings=${serv}`;
+const FR={0.25:'¼',0.5:'½',0.75:'¾'};
+const amt=x=>{let v=Math.round(x.amount*ratio*4)/4; if(x.unit==='ק״ג') return (Math.round(x.amount*ratio*10)/10)+' ק״ג'; const w=Math.floor(v),f=+(v-w).toFixed(2); return ((w||'')+(FR[f]?(w?' ':'')+FR[f]:''))+' '+x.unit;};
+const mmss=s=>{const h=Math.floor(s/3600),m=Math.floor(s%3600/60),ss=s%60;return (h?h+':':'')+String(m).padStart(h?2:1,'0')+':'+String(ss).padStart(2,'0');};
+const spoken=t=>t.replace(/¼/g,'רבע').replace(/½/g,'חצי').replace(/¾/g,'שלושה רבעים').replace(/ק״ג/g,'קילו').replace(/יח׳/g,'').replace(/(\d+)\.(\d)/g,'$1 נקודה $2');
+
+function speak(text){
+  if(!('speechSynthesis' in window)){MT.toast('הדפדפן אינו תומך בהקראה קולית','🔇');return;}
+  speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(spoken(text)); u.lang='he-IL'; u.rate=+$('#rate').value;
+  const v=speechSynthesis.getVoices().find(v=>v.lang&&v.lang.startsWith('he')); if(v) u.voice=v;
+  else if(speechSynthesis.getVoices().length) MT.toast('לא נמצא קול בעברית בדפדפן זה','🔇');
+  speechSynthesis.speak(u);
+}
+function render(dir=0){
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  if(i>=R.steps.length){ done(); return; }
+  const s=R.steps[i]; const ings=R.ingredients.filter(x=>s.ids.includes(x.id));
+  $('#bar').style.width=((i+1)/R.steps.length*100)+'%';
+  const st=$('#step'); st.classList.remove('enter'); void st.offsetWidth; st.classList.add('enter');
+  st.innerHTML=`<div class="count">שלב ${i+1} מתוך ${R.steps.length}</div><h1>${s.t}</h1>
+    <div class="speak" style="display:flex;gap:10px;flex-wrap:wrap"><button class="cbtn" id="say">${MT.I.speaker} הקראה</button><button class="cbtn" id="pause">⏸ השהיה</button><button class="cbtn" id="resume">▶ המשך</button></div>`;
+  $('#side').innerHTML=`<h4>מצרכים לשלב הזה</h4><ul>${ings.map(x=>`<li><span>${x.name}</span><b>${amt(x)}</b></li>`).join('')||'<li>אין מצרכים חדשים</li>'}</ul>
+    ${s.timer?`<div class="big-timer"><div class="hint">טיימר לשלב</div><div class="t">${mmss(s.timer)}</div><button class="btn btn-primary" style="margin-top:10px;width:100%" id="startT">${MT.I.play} הפעלת טיימר</button></div>`:''}`;
+  $('#say').onclick=()=>speak(s.t+'. '+ings.map(x=>amt(x)+' '+x.name).join(', '));
+  $('#pause').onclick=()=>speechSynthesis.pause(); $('#resume').onclick=()=>speechSynthesis.resume();
+  if(s.timer) $('#startT').onclick=()=>addTimer(`שלב ${i+1}`, s.timer);
+  $('#prev').disabled=i===0; $('#prev').style.opacity=i===0?.4:1;
+  $('#next').textContent=i===R.steps.length-1?'סיום ✓':'הבא ←';
+  if(auto) $('#say').click();
+}
+function done(){
+  $('#bar').style.width='100%';
+  $('#step').innerHTML=`<div class="count">כל הכבוד!</div><h1>סיימתם. בתיאבון 🍽️</h1><div class="speak" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-accent btn-lg" href="favorites.html">שמירה למועדפים</a><a class="btn btn-ghost btn-lg" style="color:#fff;border-color:rgba(255,255,255,.3)" href="index.html">למתכון הבא</a></div>`;
+  $('#side').innerHTML=`<h4>סיכום</h4><ul><li><span>מנות</span><b>${serv}</b></li><li><span>שלבים</span><b>${R.steps.length}</b></li><li><span>טיימרים שהופעלו</span><b>${timers.length}</b></li></ul>`;
+  $('#next').style.visibility='hidden';
+}
+function addTimer(label,sec){
+  const t={id:Date.now(),label,left:sec}; timers.push(t); drawTimers(); MT.toast(`טיימר הופעל: ${label}`,'⏱');
+}
+function drawTimers(){
+  $('#timers').innerHTML=timers.filter(t=>!t.gone).map(t=>`<span class="tchip ${t.left<=0?'done':''}">⏱ ${t.label} · ${t.left>0?mmss(t.left):'הסתיים!'}<button data-t="${t.id}" aria-label="סגירת טיימר">✕</button></span>`).join('');
+}
+setInterval(()=>{ let ch=false; timers.forEach(t=>{ if(t.left>0&&!t.gone){t.left--;ch=true; if(t.left===0){ speak(`הטיימר של ${t.label} הסתיים`); try{navigator.vibrate&&navigator.vibrate([300,100,300])}catch(e){} }}}); if(ch) drawTimers(); },1000);
+$('#timers').addEventListener('click',e=>{const b=e.target.closest('[data-t]'); if(b){timers.find(t=>t.id==b.dataset.t).gone=true; drawTimers();}});
+$('#next').onclick=()=>{i++;render(1)}; $('#prev').onclick=()=>{if(i>0){i--;render(-1)}};
+$('#auto').onclick=()=>{auto=!auto;$('#auto').classList.toggle('on',auto);$('#auto').setAttribute('aria-pressed',auto); if(auto) $('#say')&&$('#say').click();};
+$('#rate').oninput=e=>$('#rateV').textContent=(+e.target.value).toFixed(2);
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft') $('#next').click(); if(e.key==='ArrowRight') $('#prev').click(); });
+let sx=null; document.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{ if(sx===null) return; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>60){ dx>0?$('#next').click():$('#prev').click(); } sx=null; });
+/* Wake lock */
+let lock=null; async function wl(){ try{ lock=await navigator.wakeLock.request('screen'); }catch(e){ $('#wake').textContent='הדפדפן לא תומך בהשארת המסך דלוק'; $('#wake').classList.add('off');} }
+if('wakeLock' in navigator){ wl(); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') wl(); }); } else { $('#wake').textContent='השארת מסך דלוק אינה נתמכת בדפדפן'; $('#wake').classList.add('off'); }
+if(R.steps.length>1 && RID==='r1') timers.push({id:1,label:'צלי בתנור',left:9871}); drawTimers();
+render();
+</script>
+</body>
+</html>

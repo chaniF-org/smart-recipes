@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מה יש לי במטבח · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧺</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div id="content">
+  <div class="page-head"><div>
+    <nav class="crumbs" aria-label="פירורי לחם"><a href="index.html">בית</a><span>/</span><span>מה יש לי במטבח</span></nav>
+    <h1>מה יש לי במטבח</h1>
+    <p>כותבים בחופשיות מה יש בבית, ומקבלים מתכון שמבוסס על המצרכים האלו, עם סימון של מה כבר יש ומה חסר.</p>
+  </div></div>
+
+  <div class="pantry-grid">
+    <section class="panel pantry-box" aria-labelledby="hTitle">
+      <h2 id="hTitle" style="font-size:1.3rem">1. מה יש לכם?</h2>
+      <label class="field" style="margin-top:var(--s3)"><span>כתבו בשפה חופשית</span>
+        <textarea class="textarea" id="free" maxlength="500" placeholder="למשל: חצי קילו חזה עוף, 3 תפוחי אדמה, בצל, קצת שמנת, שום ולימון"></textarea></label>
+      <div class="pantry-row">
+        <span class="count" id="cnt">0/500</span>
+        <button class="btn btn-primary btn-sm" id="parse">זהה מצרכים</button>
+      </div>
+      <div class="label" style="margin-top:var(--s4)">המצרכים שזוהו <small class="count">(אפשר למחוק או להוסיף)</small></div>
+      <div class="have-list" id="have" aria-live="polite"></div>
+      <div class="pantry-row" style="margin-top:var(--s2)">
+        <input class="input" id="addOne" placeholder="הוספת מצרך בודד" style="flex:1;min-width:160px" maxlength="40">
+        <button class="btn btn-ghost btn-sm" id="addBtn">הוספה</button>
+      </div>
+      <div class="quick" id="quick" aria-label="הוספה מהירה"></div>
+      <div class="notice warn" id="mixWarn" style="display:none;margin-top:var(--s4)"><span class="ni">⚠️</span><span>ברשימה יש גם מצרך בשרי וגם מצרך חלבי. המתכון ישתמש רק במצרכים שמתאימים לסוג הכשרות שבחרתם, והשאר יסומנו כלא בשימוש.</span></div>
+    </section>
+
+    <section class="panel pantry-box" aria-labelledby="oTitle">
+      <h2 id="oTitle" style="font-size:1.3rem">2. הגדרות</h2>
+      <div class="opt-group"><span class="label">סוג כשרות <small class="count" id="kHint"></small></span>
+        <div class="seg" role="radiogroup" aria-label="סוג כשרות">
+          <input type="radio" name="k" id="k1" value="meat"><label for="k1"><span class="dot" style="background:var(--meat)"></span>בשרי</label>
+          <input type="radio" name="k" id="k2" value="dairy"><label for="k2"><span class="dot" style="background:var(--dairy)"></span>חלבי</label>
+          <input type="radio" name="k" id="k3" value="parve" checked><label for="k3"><span class="dot" style="background:var(--parve)"></span>פרווה</label>
+        </div></div>
+      <div class="opt-group"><span class="label">סוג מנה</span>
+        <div class="seg" role="radiogroup" aria-label="סוג מנה">
+          <input class="neutral" type="radio" name="t" id="t0" value="any" checked><label for="t0">הכול</label>
+          <input class="neutral" type="radio" name="t" id="t1" value="starter"><label for="t1">ראשונה</label>
+          <input class="neutral" type="radio" name="t" id="t2" value="main"><label for="t2">עיקרית</label>
+          <input class="neutral" type="radio" name="t" id="t3" value="side"><label for="t3">תוספת</label>
+          <input class="neutral" type="radio" name="t" id="t4" value="dessert"><label for="t4">קינוח</label>
+        </div></div>
+      <div class="opt-group"><span class="label">כמה מצרכים מותר שיחסרו?</span>
+        <div class="seg" role="radiogroup" aria-label="מצרכים חסרים">
+          <input class="neutral" type="radio" name="m" id="m0" value="0" checked><label for="m0">אף אחד</label>
+          <input class="neutral" type="radio" name="m" id="m2" value="2"><label for="m2">עד 2</label>
+          <input class="neutral" type="radio" name="m" id="m4" value="4"><label for="m4">עד 4</label>
+        </div></div>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:var(--s5)"><input type="checkbox" id="staples" checked> <span>יש לי בסיס בבית (מלח, פלפל, שמן, סוכר, קמח, מים)</span></label>
+      <div class="opt-group"><span class="label">מנות</span>
+        <input class="input" type="number" id="serv" min="1" max="20" value="4" style="max-width:120px"></div>
+      <button class="btn btn-accent btn-lg" id="gen" style="width:100%;margin-top:var(--s6)" disabled>צור מתכון ממה שיש לי</button>
+      <p class="hint" style="margin-top:8px;text-align:center">צריך לפחות 2 מצרכים</p>
+    </section>
+  </div>
+
+  <section class="panel gen" id="result" aria-live="polite"></section>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+MT.mount('pantry');
+const $=s=>document.querySelector(s);
+/* Demo dictionary — in production: server-side kashrut_dictionary + small-model extraction */
+const DICT={'עוף':['🍗','meat'],'חזה עוף':['🍗','meat'],'בקר':['🥩','meat'],'בשר טחון':['🍖','meat'],'הודו':['🦃','meat'],
+ 'שמנת':['🥛','dairy'],'גבינה':['🧀','dairy'],'פטה':['🧀','dairy'],'חמאה':['🧈','dairy'],'חלב':['🥛','dairy'],'יוגורט':['🍶','dairy'],
+ 'תפוחי אדמה':['🥔','parve'],'תפוח אדמה':['🥔','parve'],'בצל':['🧅','parve'],'שום':['🧄','parve'],'לימון':['🍋','parve'],'עגבניות':['🍅','parve'],'עגבנייה':['🍅','parve'],
+ 'ביצים':['🥚','parve'],'ביצה':['🥚','parve'],'אורז':['🍚','parve'],'פסטה':['🍝','parve'],'גזר':['🥕','parve'],'קישוא':['🥒','parve'],'קישואים':['🥒','parve'],'פטריות':['🍄','parve'],
+ 'בטטה':['🍠','parve'],'חציל':['🍆','parve'],'טחינה':['🥜','parve'],'עדשים':['🫘','parve'],'פלפל':['🫑','parve'],'תרד':['🥬','parve'],'שמן זית':['🫒','parve']};
+const QUICK=['ביצים','בצל','שום','עגבניות','תפוחי אדמה','אורז','לימון','גבינה','חזה עוף','פטריות'];
+let items=[];
+function lookup(n){ const k=Object.keys(DICT).sort((a,b)=>b.length-a.length).find(w=>n.includes(w)); return k?DICT[k]:null; }
+function add(raw){
+  const n=raw.replace(/^(ו|גם|קצת|חצי|כמה)\s*/,'').replace(/^[\d.,½¼]+\s*(קילו|ק״ג|גרם|יח׳|כוס|כפות|כף)?\s*/,'').trim();
+  if(!n||n.length<2||items.some(i=>i.n===n)) return;
+  const d=lookup(n); items.push({n,e:d?d[0]:'❔',k:d?d[1]:null});
+}
+const KC={meat:'var(--meat)',dairy:'var(--dairy)',parve:'var(--parve)'};
+function render(){
+  $('#have').innerHTML=items.map((i,x)=>`<span class="have ${i.k?'':'unknown'}" title="${i.k?MT.KASHRUT[i.k].label:'לא מוכר – ייבדק בשרת'}"><span class="kd" style="background:${i.k?KC[i.k]:'var(--warn)'}"></span>${i.e} ${i.n}<button aria-label="הסרת ${i.n}" data-x="${x}">✕</button></span>`).join('');
+  $('#quick').innerHTML=QUICK.filter(q=>!items.some(i=>i.n===q)).map(q=>`<button class="chip-btn" data-q="${q}">＋ ${q}</button>`).join('');
+  const hasM=items.some(i=>i.k==='meat'), hasD=items.some(i=>i.k==='dairy');
+  $('#mixWarn').style.display=hasM&&hasD?'flex':'none';
+  const sug=hasM&&!hasD?'meat':hasD&&!hasM?'dairy':(!hasM&&!hasD&&items.length?'parve':null);
+  if(sug && !kTouched){ document.querySelector(`input[name=k][value=${sug}]`).checked=true; $('#kHint').textContent='(הוצע לפי המצרכים)'; }
+  $('#gen').disabled=items.length<2; $('#gen').classList.toggle('is-ready',items.length>=2);
+}
+let kTouched=false; document.querySelectorAll('input[name=k]').forEach(r=>r.addEventListener('change',()=>{kTouched=true;$('#kHint').textContent='';}));
+$('#free').addEventListener('input',e=>$('#cnt').textContent=e.target.value.length+'/500');
+$('#parse').addEventListener('click',async()=>{
+  const v=$('#free').value.trim(); if(!v){MT.toast('כתבו קודם מה יש לכם','✎');return;}
+  $('#parse').textContent='מזהה…'; await MT.wait(700); $('#parse').textContent='זהה מצרכים';
+  v.split(/,|\n|،| ו(?=[א-ת])|;/).forEach(add); render();
+});
+$('#have').addEventListener('click',e=>{const b=e.target.closest('[data-x]'); if(b){items.splice(+b.dataset.x,1);render();}});
+$('#quick').addEventListener('click',e=>{const b=e.target.closest('[data-q]'); if(b){add(b.dataset.q);render();}});
+const addOne=()=>{add($('#addOne').value);$('#addOne').value='';render();};
+$('#addBtn').addEventListener('click',addOne); $('#addOne').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addOne();}});
+
+if(MT.qs.get('preset')){ $('#free').value='חצי קילו חזה עוף, 3 תפוחי אדמה, בצל, שום ולימון'; $('#cnt').textContent=$('#free').value.length+'/500';
+  ['חזה עוף','תפוחי אדמה','בצל','שום','לימון'].forEach(add); MT.toast('העוזר מילא את המצרכים שכתבתם','✨'); }
+render();
+
+const msgs=['קוראים את מה שיש לכם…','מחפשים שילוב שמנצל הכי הרבה…','בודקים כשרות…'];
+$('#gen').addEventListener('click',async()=>{
+  const k=document.querySelector('input[name=k]:checked').value, maxMiss=+document.querySelector('input[name=m]:checked').value, serv=$('#serv').value;
+  const usable=items.filter(i=>!i.k||i.k===k||i.k==='parve'), unused=items.filter(i=>!usable.includes(i));
+  const main=usable.find(i=>i.k===k&&k!=='parve')||usable[0];
+  const others=usable.filter(i=>i!==main);
+  const missPool={meat:[['פפריקה מתוקה','1 כף'],['ציר עוף','1 כוס'],['רוזמרין','2 ענפים'],['יין לבן לבישול','½ כוס']],dairy:[['פרמזן','50 גרם'],['אגוז מוסקט','קורט'],['פטרוזיליה','½ צרור'],['עלי בזיליקום','חופן']],parve:[['פטרוזיליה','½ צרור'],['כמון','1 כפית'],['רסק עגבניות','2 כפות'],['שמיר','½ צרור']]}[k].slice(0,maxMiss);
+  const title=`${main.n} ${others[0]?'עם '+others.slice(0,2).map(o=>o.n).join(' ו'):''} בתבנית אחת`;
+  const box=$('#result'); box.classList.add('show');
+  box.innerHTML=`<div class="gen-top"><div id="art">${MT.artEmoji({e:main.e,h:{meat:18,dairy:210,parve:140}[k],g:others.slice(0,2).map(o=>o.e),title})}</div><div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${MT.kchip(k)}<span class="tag">🧺 ממה שיש לי</span><span class="tag">${serv} מנות</span></div>
+    <h2 id="rt"><span class="sk" style="display:block;height:38px;width:80%"></span></h2>
+    <p id="rd" style="color:var(--ink-2)"><span class="loading-line"><span class="spinner"></span><span id="lm">${msgs[0]}</span></span></p></div></div>
+    <div class="usage"><div class="u"><b>${usable.length}/${items.length}</b><small>מהמצרכים שלכם בשימוש</small></div>
+      <div class="u"><b>${missPool.length}</b><small>מצרכים חסרים</small></div>
+      <div class="u"><b>${$('#staples').checked?'✓':'✕'}</b><small>מצרכי בסיס</small></div></div>
+    ${unused.length?`<div class="notice warn" style="margin-top:var(--s4)"><span class="ni">🔒</span><span>לא בשימוש בגלל סוג הכשרות: ${unused.map(u=>u.n).join(', ')}.</span></div>`:''}
+    <div class="gen-cols"><div><h4>מצרכים</h4><ul class="ing-list" id="ri"></ul>
+      ${missPool.length?`<button class="btn btn-ghost btn-sm" style="margin-top:var(--s3)" id="toShop">${MT.I.cart} הוספת החסרים לרשימת קניות</button>`:''}</div>
+      <div><h4>אופן ההכנה</h4><ol class="steps-list" id="rs"></ol></div></div>
+    <h4 style="margin-top:var(--s6)">רעיונות נוספים מאותם מצרכים</h4>
+    <div class="alts">${[['🥘','תבשיל סיר אחד','מהיר יותר, 35 דק׳'],['🥗','סלט חם','קל, בלי תנור'],['🥧','פשטידה','צריך גם ביצים']].map((a,i)=>`<button class="alt" aria-pressed="${i===0}"><span class="ae">${a[0]}</span><b>${a[1]}</b><small>${a[2]}</small></button>`).join('')}</div>
+    <div style="display:flex;gap:var(--s3);margin-top:var(--s5);flex-wrap:wrap;align-items:center"><a class="btn btn-primary" href="recipe.html?id=r7">פתיחת המתכון המלא</a><a class="btn btn-accent" href="cook.html">👨‍🍳 מצב בישול</a><button class="btn btn-ghost" data-fav>שמירה למועדפים</button><button class="btn btn-ghost" id="again">מתכון אחר</button><span class="hint" style="margin-inline-start:auto">✓ עבר בדיקת כשרות בשרת</span></div>`;
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+  let mi=0; const iv=setInterval(()=>{const l=$('#lm'); if(l) l.textContent=msgs[++mi%3]},700);
+  await MT.wait(1700); clearInterval(iv);
+  await MT.stream($('#rt'),title,18);
+  await MT.stream($('#rd'),`מנה ${MT.KFEM[k]} שבנויה סביב ${main.n}, ומנצלת ${usable.length>1?'גם את '+others.map(o=>o.n).join(', '):'את מה שיש'}. ${missPool.length?'נוספו רק '+missPool.length+' מצרכים קטנים שמשדרגים את הטעם.':'בלי לקנות שום דבר.'}`,5);
+  const qty=['500 גרם','3 יח׳','1 יח׳','3 שיניים','1 יח׳','1 כוס'];
+  const rows=[...usable.map((u,i)=>`<li class="have-it"><span>${u.n}</span><b>${qty[i%qty.length]}</b></li>`),
+    ...missPool.map(m=>`<li class="missing"><span>${m[0]}</span><b>${m[1]}</b></li>`),
+    ...($('#staples').checked?[['שמן זית','3 כפות'],['מלח ופלפל','לפי הטעם']].map(s=>`<li class="staple"><span>${s[0]}</span><b>${s[1]}</b></li>`):[])];
+  for(const r of rows){ $('#ri').insertAdjacentHTML('beforeend',r); await MT.wait(110); }
+  const steps=[`מחממים תנור ל-200 מעלות. חותכים את ה${main.n} לנתחים אחידים ומתבלים${$('#staples').checked?' במלח, פלפל ושמן':''}.`,
+    others[0]?`מסדרים בתבנית את ה${others.map(o=>o.n).join(', ')} ומניחים מעליהם את ה${main.n}.`:`מסדרים בתבנית בשכבה אחת.`,
+    `אופים 40–45 דקות, עד שהכול שחום ורך. מגישים חם.`];
+  for(const s of steps){const li=document.createElement('li');$('#rs').appendChild(li);await MT.stream(li,s,4);}
+  $('#toShop')&&$('#toShop').addEventListener('click',()=>MT.toast(`${missPool.length} מצרכים נוספו לרשימת הקניות <a href="shopping.html">לרשימה</a>`,'🛒'));
+  $('#again').addEventListener('click',()=>$('#gen').click());
+  box.querySelectorAll('.alt').forEach(a=>a.addEventListener('click',()=>{box.querySelectorAll('.alt').forEach(x=>x.setAttribute('aria-pressed','false'));a.setAttribute('aria-pressed','true');MT.toast('ייווצר מתכון בסגנון '+a.querySelector('b').textContent,'✨');}));
+});
+</script>
+</body>
+</html>
