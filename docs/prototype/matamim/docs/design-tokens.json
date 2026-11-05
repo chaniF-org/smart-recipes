@@ -1,0 +1,116 @@
+{
+  "color": {
+    "brand": {
+      "aubergine-900": "#1E1029",
+      "aubergine-800": "#2C1840",
+      "aubergine-700": "#3D2352",
+      "aubergine-500": "#6A4A85",
+      "aubergine-200": "#D9CDE4",
+      "aubergine-100": "#EFE9F4",
+      "saffron-600": "#D98E0B",
+      "saffron-500": "#F2A922",
+      "saffron-200": "#FBDD9E",
+      "saffron-100": "#FDF2D9"
+    },
+    "kashrut": {
+      "meat": {
+        "solid": "#B3263E",
+        "soft": "#FBE8EB",
+        "line": "#F1C2CA"
+      },
+      "dairy": {
+        "solid": "#2463B0",
+        "soft": "#E6EFFA",
+        "line": "#BCD3F0"
+      },
+      "parve": {
+        "solid": "#25744A",
+        "soft": "#E3F3EA",
+        "line": "#B9E0C9"
+      }
+    },
+    "neutral": {
+      "bg": "#F3F2F6",
+      "surface": "#FFFFFF",
+      "surface-2": "#FAF9FC",
+      "line": "#E3DFEA",
+      "line-strong": "#CEC7D9",
+      "ink": "#1D1828",
+      "ink-2": "#433C52",
+      "muted": "#6F6880"
+    },
+    "feedback": {
+      "ok": "#25744A",
+      "warn": "#C97A06",
+      "error": "#C0352B",
+      "info": "#2463B0"
+    }
+  },
+  "font": {
+    "display": "'Frank Ruhl Libre', serif",
+    "ui": "'IBM Plex Sans Hebrew', sans-serif",
+    "size": {
+      "display": "clamp(2.6rem, 2rem + 2.6vw, 4.25rem)",
+      "h1": "clamp(2rem, 1.6rem + 1.6vw, 2.9rem)",
+      "h2": "clamp(1.5rem, 1.3rem + .8vw, 2rem)",
+      "h3": "1.25rem",
+      "body": "1rem",
+      "small": "0.875rem",
+      "xs": "0.78rem"
+    },
+    "weight": {
+      "display": 900,
+      "cardTitle": 700,
+      "ui-bold": 700,
+      "ui-semibold": 600,
+      "body": 400
+    },
+    "lineHeight": {
+      "body": 1.6,
+      "heading": 1.15
+    }
+  },
+  "space": {
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "5": "24px",
+    "6": "32px",
+    "7": "48px",
+    "8": "64px",
+    "9": "96px"
+  },
+  "radius": {
+    "shell": "32px",
+    "panel": "24px",
+    "card": "18px",
+    "control": "12px",
+    "pill": "999px"
+  },
+  "shadow": {
+    "e1": "0 1px 2px rgba(44,24,64,.06), 0 1px 1px rgba(44,24,64,.04)",
+    "e2": "0 6px 20px -8px rgba(44,24,64,.18), 0 2px 6px rgba(44,24,64,.05)",
+    "e3": "0 24px 48px -20px rgba(44,24,64,.35), 0 8px 18px -10px rgba(44,24,64,.18)"
+  },
+  "motion": {
+    "ease": "cubic-bezier(.2,.8,.2,1)",
+    "wheelSpin": "3200ms",
+    "reveal": "380ms",
+    "merge": "1800ms",
+    "modal": "300ms",
+    "hover": "250ms"
+  },
+  "layout": {
+    "headerHeight": "72px",
+    "assistantWidth": "360px",
+    "assistantCollapsed": "64px",
+    "containerMax": "1180px",
+    "breakpoints": {
+      "lg": "1280px",
+      "md": "1100px",
+      "sm": "900px",
+      "xs": "640px"
+    }
+  }
+}

@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>צלי בקר בסילאן ורימונים · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍖</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div id="content">
+  <nav class="crumbs" aria-label="פירורי לחם"><a href="index.html">בית</a><span>/</span><a href="menu.html">תפריט ליל שבת</a><span>/</span><span id="crumb">מתכון</span></nav>
+
+  <section class="recipe-hero">
+    <div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="chips"></div>
+      <h1 id="title"></h1>
+      <p class="desc" id="desc"></p>
+      <div class="stats">
+        <div><small>הכנה</small><b id="sPrep"></b></div>
+        <div><small>בישול</small><b id="sCook"></b></div>
+        <div><small>מנות</small><b id="sServ"></b></div>
+        <div><small>רמה</small><b id="sDiff"></b></div>
+      </div>
+      <div class="r-actions">
+        <a class="btn btn-accent btn-lg" href="cook.html" id="cookBtn">👨‍🍳 מצב בישול</a>
+        <button class="btn btn-primary btn-lg" id="addShop"></button>
+        <button class="btn btn-ghost btn-icon" data-fav aria-label="שמירה למועדפים" title="שמירה למועדפים"></button>
+        <button class="btn btn-ghost btn-icon" id="share" aria-label="שיתוף" title="שיתוף"></button>
+        <button class="btn btn-ghost btn-icon" onclick="window.print()" aria-label="הדפסה" title="הדפסה" id="printBtn"></button>
+      </div>
+    </div>
+    <div id="heroArt"></div>
+  </section>
+
+  <div class="panel toolbar" role="toolbar" aria-label="כלי התאמה">
+    <span class="lbl">⚖️ מספר מנות</span>
+    <div class="stepper"><button type="button" data-s="1" aria-label="מנה נוספת">+</button><output id="serv">8</output><button type="button" data-s="-1" aria-label="מנה אחת פחות">−</button></div>
+    <span class="sep"></span>
+    <button class="btn btn-soft btn-sm" id="convertBtn">🔄 המרת סוג כשרות</button>
+    <button class="btn btn-soft btn-sm" id="subHint">🔁 אין לי מצרך</button>
+    <span class="hint" style="margin-inline-start:auto" id="verLabel">גרסה מקורית</span>
+    <button class="btn btn-ghost btn-sm" id="resetBtn" style="display:none">חזרה למקור</button>
+  </div>
+  <div class="notice warn scale-note" id="scaleNote"><span class="ni">⚠️</span><span>הגדלתם את המתכון פי יותר מ-2. ייתכן שיידרשו סיר גדול יותר וזמן בישול ארוך יותר.</span></div>
+
+  <div class="r-body" style="margin-top:var(--s5)">
+    <aside class="panel ing-panel" aria-labelledby="ingT">
+      <h2 id="ingT">מצרכים</h2>
+      <div id="ings"></div>
+      <p class="hint" style="margin-top:var(--s3)">רחפו על מצרך ולחצו "אין לי" לקבלת תחליף.</p>
+    </aside>
+    <section class="panel steps-panel" aria-labelledby="stT">
+      <h2 id="stT">אופן ההכנה</h2>
+      <div id="steps"></div>
+    </section>
+  </div>
+
+  <div class="notice" style="margin-top:var(--s6)"><span class="ni">🏷️</span><span>הסיווג <b id="kLbl">בשרי</b> נקבע אוטומטית לפי המצרכים ועבר בדיקה בשרת. יש לבדוק את הכשרות של המוצרים עצמם.</span></div>
+
+  <section style="margin-top:var(--s7)"><div class="sec-head"><div><h2>אולי יתאים גם</h2><p>מנות נוספות מאותו תפריט</p></div></div>
+    <div class="grid grid-3" id="related"></div></section>
+</div>
+
+<!-- Substitute modal -->
+<div class="modal-backdrop" id="subModal" role="dialog" aria-modal="true" aria-labelledby="subT">
+  <div class="modal"><div class="modal-head"><h3 id="subT">תחליף ל<span id="subName"></span></h3><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="modal-body">
+      <p class="hint" style="margin-bottom:var(--s4)">כל ההצעות שומרות על סיווג <b id="subK">בשרי</b> ומותאמות לכמות במתכון.</p>
+      <div class="subs" id="subs"></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" data-close>ביטול</button><button class="btn btn-primary" id="applySub" disabled>החלפה במתכון</button></div></div>
+</div>
+
+<!-- Convert modal -->
+<div class="modal-backdrop" id="convModal" role="dialog" aria-modal="true" aria-labelledby="convT">
+  <div class="modal wide"><div class="modal-head"><h3 id="convT">המרת סוג כשרות</h3><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="modal-body">
+      <div style="display:flex;gap:var(--s4);align-items:center;flex-wrap:wrap;margin-bottom:var(--s4)">
+        <span id="fromK"></span><span aria-hidden="true">←</span>
+        <div class="seg" role="radiogroup" aria-label="סוג היעד">
+          <input type="radio" name="tk" id="tk1" value="meat"><label for="tk1"><span class="dot" style="background:var(--meat)"></span>בשרי</label>
+          <input type="radio" name="tk" id="tk2" value="dairy"><label for="tk2"><span class="dot" style="background:var(--dairy)"></span>חלבי</label>
+          <input type="radio" name="tk" id="tk3" value="parve" checked><label for="tk3"><span class="dot" style="background:var(--parve)"></span>פרווה</label>
+        </div>
+        <button class="btn btn-primary btn-sm" id="runConv">המרה</button>
+      </div>
+      <div id="convOut"><div class="notice"><span class="ni">ℹ️</span><span>בחרו סוג יעד ולחצו "המרה". המתכון המקורי לא ישתנה, והגרסה המומרת תישמר כמתכון חדש.</span></div></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" data-close>סגירה</button><button class="btn btn-accent" id="openConv" style="display:none">שמירת הגרסה המומרת</button></div></div>
+</div>
+
+<!-- Shopping modal -->
+<div class="modal-backdrop" id="shopModal" role="dialog" aria-modal="true" aria-labelledby="shT">
+  <div class="modal"><div class="modal-head"><h3 id="shT">הוספה לרשימת קניות</h3><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="modal-body"><p style="color:var(--muted);margin-bottom:var(--s4)" id="shopSum"></p>
+      <label class="field"><span>להוסיף אל</span><select class="select"><option>שבת פרשת השבוע</option><option>קניות שבועיות</option><option>+ רשימה חדשה</option></select></label></div>
+    <div class="modal-foot"><button class="btn btn-ghost" data-close>ביטול</button><button class="btn btn-primary" id="doShop">הוספה לרשימה</button></div></div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+MT.mount('recipe');
+const $=s=>document.querySelector(s); const RID=MT.qs.get('id')||'r1'; const R=MT.build(RID);
+document.title=R.title+' · מטעמים';
+$('#addShop').innerHTML=MT.I.cart+' הוספה לרשימת קניות'; $('[data-fav]').innerHTML=MT.I.heart; $('#share').innerHTML=MT.I.share; $('#printBtn').innerHTML=MT.I.print;
+$('#crumb').textContent=R.title; $('#title').textContent=R.title; $('#desc').textContent=R.desc; $('#kLbl').textContent=MT.KASHRUT[R.k].label;
+$('#chips').innerHTML=MT.kchip(R.k)+`<span class="tag">${MT.DISH[R.dish]}</span><span class="tag">${MT.SOURCE[R.src]}</span>`;
+const fmtMin=m=>m>=60?`${Math.floor(m/60)} ש׳${m%60?' '+m%60+' ד׳':''}`:`${m} דק׳`;
+$('#sPrep').textContent=fmtMin(R.prep); $('#sCook').textContent=fmtMin(R.cook); $('#sDiff').textContent=MT.DIFF[R.diff];
+$('#heroArt').innerHTML=MT.art(R,'big');
+
+/* Scaling with unit-aware rounding */
+const FR={0.25:'¼',0.5:'½',0.75:'¾'};
+function fmt(a,u){
+  if(u==='ק״ג'){ if(a<1) return [Math.round(a*1000/10)*10,'גרם']; return [Math.round(a*10)/10,'ק״ג']; }
+  let v; if(u==='יח׳') v=Math.round(a*2)/2; else v=Math.round(a*4)/4;
+  if(u==='כפית' && v>=3){ return fmt(v/3,'כפות'); }
+  if(u==='כפות' && v>=16){ return fmt(v/16,'כוס'); }
+  const w=Math.floor(v), f=+(v-w).toFixed(2);
+  return [(w?w:'')+(FR[f]?(w?' ':'')+FR[f]:'') || '0', u==='כוס'&&v>1?'כוסות':u];
+}
+let serv=+(MT.qs.get('servings')||R.serv); const swaps={};
+function renderIng(){
+  const ratio=serv/R.serv;
+  $('#ings').innerHTML=R.ingredients.map(i=>{ const sw=swaps[i.id]; const [a,u]=fmt(i.amount*ratio,i.unit);
+    return `<div class="ing ${sw?'swapped':''}" data-id="${i.id}"><input type="checkbox" aria-label="סימון ${i.name}">
+      <span>${sw?`${sw.n}<span class="was">${i.name}</span>`:i.name}</span>
+      <span class="amt">${sw?sw.a:a+' '+u}</span>
+      <button class="nohave" data-sub="${i.id}">אין לי</button></div>`; }).join('');
+  $('#serv').textContent=serv; $('#sServ').textContent=serv;
+  $('#scaleNote').classList.toggle('show',ratio>2);
+  const changed=serv!==R.serv||Object.keys(swaps).length;
+  $('#verLabel').textContent=changed?`גרסה מותאמת · ${serv} מנות${Object.keys(swaps).length?' · '+Object.keys(swaps).length+' תחליפים':''}`:'גרסה מקורית';
+  $('#resetBtn').style.display=changed?'inline-flex':'none';
+  $('#cookBtn').href=`cook.html?id=${RID}&servings=${serv}`;
+  const u=new URL(location); u.searchParams.set('servings',serv); u.searchParams.delete('sub'); history.replaceState(null,'',u);
+}
+function renderSteps(){
+  const byId=Object.fromEntries(R.ingredients.map(i=>[i.id,i]));
+  $('#steps').innerHTML=R.steps.map((s,n)=>`<div class="step"><span class="n">${n+1}</span><div><p>${s.t}</p>
+    <div class="uses">${s.ids.map(id=>`<span class="tag">${swaps[id]?swaps[id].n:byId[id].name}</span>`).join('')}</div>
+    ${s.timer?`<a class="timer-tag" href="cook.html?id=${RID}&step=${n+1}">⏱ טיימר ${fmtMin(Math.round(s.timer/60))}</a>`:''}</div></div>`).join('');
+}
+renderIng(); renderSteps();
+document.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>{serv=Math.min(40,Math.max(1,serv+ +b.dataset.s));renderIng();}));
+$('#resetBtn').addEventListener('click',()=>{serv=R.serv;for(const k in swaps)delete swaps[k];renderIng();renderSteps();MT.toast('חזרה לגרסה המקורית','↺');});
+
+/* Substitutes */
+let subId=null, subSel=null;
+async function openSub(id){
+  subId=id; subSel=null; const ing=R.ingredients.find(i=>i.id===id); $('#subName').textContent=ing.name; $('#applySub').disabled=true;
+  $('#subs').innerHTML='<div class="loading-line"><span class="spinner"></span>מחפש תחליפים שמתאימים למתכון…</div>'; MT.modal('subModal');
+  await MT.wait(900);
+  const list=MT.subsFor(RID,ing);
+  $('#subs').innerHTML=list.map((s,i)=>`<button class="sub" data-i="${i}"><span class="se">${s.e}</span><span><b>${s.n} · ${s.a}</b><small>${s.d}</small><span class="st tag">${s.st}</span></span></button>`).join('');
+}
+$('#ings').addEventListener('click',e=>{const b=e.target.closest('[data-sub]'); if(b) openSub(b.dataset.sub);});
+$('#subHint').addEventListener('click',()=>openSub(RID==='r1'?'i4':R.ingredients[0].id));
+$('#subs').addEventListener('click',e=>{const b=e.target.closest('.sub'); if(!b) return; document.querySelectorAll('.sub').forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); subSel=MT.subsFor(RID,R.ingredients.find(i=>i.id===subId))[+b.dataset.i]; $('#applySub').disabled=false;});
+$('#applySub').addEventListener('click',()=>{swaps[subId]=subSel; renderIng(); renderSteps(); MT.modal('subModal',false); MT.toast(`הוחלף ב${subSel.n} · עבר בדיקת כשרות`,'🔁');});
+if(MT.qs.get('sub')) setTimeout(()=>openSub(MT.qs.get('sub')),400);
+
+/* Convert */
+$('#subK').textContent=MT.KASHRUT[R.k].label; $('#fromK').innerHTML=MT.kchip(R.k);
+document.querySelectorAll('input[name=tk]').forEach(x=>{ if(x.value===R.k){x.disabled=true;x.nextElementSibling.style.display='none';} });
+(document.querySelector('input[name=tk]:not([disabled])[value=parve]')||document.querySelector('input[name=tk]:not([disabled])')).checked=true;
+$('#convertBtn').addEventListener('click',()=>MT.modal('convModal'));
+$('#runConv').addEventListener('click',async()=>{
+  const t=document.querySelector('input[name=tk]:checked').value; const out=$('#convOut');
+  out.innerHTML='<div class="loading-line"><span class="spinner"></span>ממיר את המתכון ובודק כשרות מול סוג היעד…</div>'; await MT.wait(1400);
+  const P = t==='parve';
+  if(RID!=='r1'){ out.innerHTML=genericConv(t); $('#openConv').style.display='inline-flex'; return; }
+  out.innerHTML=`<div class="notice warn"><span class="ni">⚠️</span><span><b>שימו לב:</b> ${P?'ההמרה לפרווה משנה מהותית את אופי המנה. הבשר מוחלף בפטריות פורטובלו ובסלק צלוי, והמנה הופכת לצלי ירקות חגיגי.':'ההמרה לחלבי מחליפה את הבשר בפשטידת פטריות ובצל עם גבינות. זו מנה שונה באופייה.'}</span></div>
+  <div class="compare" style="margin-top:var(--s4)"><div class="col"><h4 style="margin-bottom:8px">לפני · <span class="k-chip k-meat">בשרי</span></h4><ul style="margin:0;padding-inline-start:18px">
+    <li><span class="chg">צלי כתף בקר 1.8 ק״ג</span></li><li>בצל סגול 4 יח׳</li><li>סילאן ½ כוס</li><li>יין אדום לבישול 1 כוס</li><li>מיץ רימונים 1 כוס</li></ul></div>
+  <div class="col after"><h4 style="margin-bottom:8px">אחרי · <span class="k-chip ${P?'k-parve':'k-dairy'}">${P?'פרווה':'חלבי'}</span></h4><ul style="margin:0;padding-inline-start:18px">
+    <li><span class="chg">${P?'פטריות פורטובלו 8 יח׳ + סלק 3 יח׳':'פטריות יער 600 גרם + 3 גבינות'}</span></li><li>בצל סגול 4 יח׳</li><li>סילאן ½ כוס</li><li>יין אדום לבישול 1 כוס</li><li>מיץ רימונים 1 כוס</li></ul></div></div>
+  <h4 style="margin-top:var(--s5)">מה הוחלף ולמה</h4>
+  <div class="change-list"><div class="change"><span>צלי כתף בקר</span><span>←</span><b>${P?'פורטובלו וסלק צלוי':'פטריות יער וגבינות'}</b><span class="r">${P?'פורטובלו נותן מרקם בשרני, הסלק שומר על הצבע העמוק ברוטב הרימונים.':'שילוב פטריות ושמנת שומר על עושר הטעם בגרסה חלבית.'}</span></div>
+  <div class="change"><span>3 שעות בתנור</span><span>←</span><b>${P?'45 דקות':'40 דקות'}</b><span class="r">ירקות אינם דורשים בישול ארוך.</span></div></div>
+  <p class="hint" style="margin-top:var(--s4)">✓ עבר validate_kashrut מול סוג היעד · נשמר כמתכון חדש (source=conversion)</p>`;
+  $('#openConv').style.display='inline-flex';
+});
+if(MT.qs.get('convert')) setTimeout(()=>{MT.modal('convModal');},400);
+
+function genericConv(t){
+  const MAP={dairy:{'חמאה':'שמן קוקוס','שמנת מתוקה':'קרם קוקוס','גבינת פטה':'טופו מלוח מפורר','פרמזן מגורר':'שמרי בירה ושקדים טחונים','גבינה לבנה':'ממרח קשיו','גבינה צהובה מגוררת':'גבינה צמחית מגוררת','ביסקוויטים':'ביסקוויטים פרווה'},
+             meat:{'כרעי עוף':'סייטן בתיבול עוף','צלי כתף בקר':'פטריות פורטובלו','בקר טחון':'עדשים שחורות'}};
+  const from=R.k; const changed=R.ingredients.filter(i=>i.k!=='parve');
+  const alt=i=>(MAP[from]||{})[i.name]||'תחליף צמחי';
+  if(!changed.length) return `<div class="notice info"><span class="ni">ℹ️</span><span>המתכון כבר פרווה. ניתן להמיר אותו לבשרי או לחלבי על ידי הוספת מרכיב, בהתאם לבחירה.</span></div>`;
+  const nk=MT.KASHRUT[t];
+  return `<div class="compare"><div class="col"><h4 style="margin-bottom:8px">לפני · ${MT.kchip(from)}</h4><ul style="margin:0;padding-inline-start:18px">${R.ingredients.map(i=>`<li>${i.k!=='parve'?`<span class="chg">${i.name}</span>`:i.name}</li>`).join('')}</ul></div>
+    <div class="col after"><h4 style="margin-bottom:8px">אחרי · ${MT.kchip(t)}</h4><ul style="margin:0;padding-inline-start:18px">${R.ingredients.map(i=>`<li>${i.k!=='parve'?`<span class="chg">${alt(i)}</span>`:i.name}</li>`).join('')}</ul></div></div>
+    <h4 style="margin-top:var(--s5)">מה הוחלף ולמה</h4><div class="change-list">${changed.map(i=>`<div class="change"><span>${i.name}</span><span>←</span><b>${alt(i)}</b><span class="r">שומר על מרקם ועל עושר דומה, בהתאם לסוג ${nk.label}.</span></div>`).join('')}</div>
+    <p class="hint" style="margin-top:var(--s4)">✓ עבר validate_kashrut מול סוג היעד · נשמר כמתכון חדש (source=conversion)</p>`;
+}
+$('#openConv').addEventListener('click',()=>{MT.modal('convModal',false);MT.toast('הגרסה המומרת נשמרה כמתכון חדש <a href="favorites.html">למועדפים</a>','🔄');});
+/* Shopping / share */
+$('#addShop').addEventListener('click',()=>{$('#shopSum').textContent=`${R.ingredients.length} פריטים לפי ${serv} מנות${Object.keys(swaps).length?', כולל התחליפים שבחרתם':''}.`;MT.modal('shopModal');});
+$('#doShop').addEventListener('click',()=>{MT.modal('shopModal',false);MT.toast(R.ingredients.length+' פריטים נוספו לרשימה <a href="shopping.html">לרשימה</a>','🛒');});
+$('#share').addEventListener('click',async()=>{ if(navigator.share){try{await navigator.share({title:R.title,url:location.href})}catch(e){}} else {try{await navigator.clipboard.writeText(location.href)}catch(e){} MT.toast('הקישור הועתק','🔗');} });
+$('#related').innerHTML=['r6','r4','r8'].map(id=>MT.card(MT.recipes.find(x=>x.id===id))).join('');
+</script>
+</body>
+</html>

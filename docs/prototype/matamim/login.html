@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>התחברות · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍲</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div class="auth">
+  <section class="auth-art">
+    <a href="index.html" class="logo" style="color:#fff" id="lg"></a>
+    <div style="position:relative;z-index:1">
+      <p class="bigq">המתכונים שלכם מחכים לכם.</p>
+      <div class="perks">
+        <div><i>❤️</i>שמירת מתכונים ותפריטים, כולל הגרסאות המותאמות</div>
+        <div><i>🛒</i>רשימות קניות שזמינות בכל המכשירים</div>
+        <div><i>✨</i>30 יצירות ביום במקום 5</div>
+      </div>
+    </div>
+    <div class="orbit" aria-hidden="true">
+      <span style="top:-36px;left:50%;transform:translateX(-50%)">🍲</span><span style="top:50%;left:-36px;transform:translateY(-50%)">🥗</span>
+      <span style="top:14%;left:12%">🍰</span><span style="top:40%;left:42%;transform:translate(-50%,-50%)">🎡</span></div>
+  </section>
+  <section class="auth-form">
+    <form id="f" novalidate>
+      <h1>שמחים לראות אתכם</h1>
+      <p class="hint" style="font-size:.95rem">אין לכם חשבון? <a class="link" href="register.html">להרשמה</a></p>
+      <label class="field"><span>אימייל</span><input class="input" type="email" id="em" placeholder="name@example.com" autocomplete="email" required></label>
+      <label class="field"><span style="display:flex;justify-content:space-between">סיסמה <a class="link" href="#" style="font-weight:500;font-size:.85rem">שכחתי סיסמה</a></span><input class="input" type="password" id="pw" placeholder="••••••••" autocomplete="current-password" required></label>
+      <p id="err" class="hint" style="color:var(--err);display:none">האימייל או הסיסמה שגויים. בדקו ונסו שוב.</p>
+      <label style="display:flex;gap:8px;align-items:center;font-size:.9rem"><input type="checkbox" checked style="accent-color:var(--aubergine-700)"> להישאר מחובר</label>
+      <button class="btn btn-primary btn-lg">התחברות</button>
+      <div class="divider">או</div>
+      <a class="btn btn-ghost btn-lg" href="index.html">להמשיך כאורח</a>
+      <p class="hint" style="text-align:center">כאורחים אפשר להשתמש בכל הפיצ׳רים, במכסה יומית מצומצמת.</p>
+    </form>
+  </section>
+</div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+document.getElementById('lg').innerHTML=MT.LOGO+'<span>מטעמים</span>';
+document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();
+  const em=document.getElementById('em').value, pw=document.getElementById('pw').value;
+  if(!em.includes('@')||pw.length<4){document.getElementById('err').style.display='block';return;}
+  MT.ls('mt_logged','1'); location.href='index.html';});
+</script>
+</body>
+</html>

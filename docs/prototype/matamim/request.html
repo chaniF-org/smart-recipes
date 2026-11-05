@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מתכון לפי בקשה · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✍️</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div id="content">
+  <div class="page-head"><div>
+    <nav class="crumbs" aria-label="פירורי לחם"><a href="index.html">בית</a><span>/</span><span>מתכון לפי בקשה</span></nav>
+    <h1>מתכון לפי בקשה</h1>
+    <p>כותבים איזו מנה רוצים ולאיזה אירוע, לא רק לשבת ולחג, ומקבלים מתכון חדש שנוצר במיוחד בשבילכם.</p>
+  </div></div>
+
+  <section class="panel ask-box" aria-labelledby="askT">
+    <h2 id="askT" style="font-size:1.3rem">מה תרצו להכין?</h2>
+    <div class="ask-row">
+      <input class="input" id="ask" maxlength="200" placeholder="למשל: עוגת יום הולדת שוקולד בצורת מספר 6">
+      <button class="btn btn-accent btn-lg" id="gen" disabled>צור מתכון</button>
+    </div>
+    <div class="count" id="cnt" style="margin-top:6px">0/200</div>
+    <div class="ideas" id="ideas" aria-label="רעיונות"></div>
+
+    <div class="label" style="margin-top:var(--s5)">לאיזה אירוע? <small class="count">(לא חובה)</small></div>
+    <div class="occ" id="occ" role="group" aria-label="אירוע"></div>
+    <div class="notice info" id="shabbatHint" style="display:none;margin-top:var(--s3)"><span class="ni">🕯️</span><span>לסעודה שלמה עם כמה מנות כדאי להשתמש ב<a class="link" href="menu-planner.html">מתכנן התפריט</a>. כאן נוצרת מנה אחת.</span></div>
+
+    <div class="req-opts">
+      <div><div class="label" style="margin-bottom:8px">סוג כשרות</div>
+        <div class="seg" role="radiogroup" aria-label="סוג כשרות">
+          <input type="radio" name="k" id="k1" value="meat"><label for="k1"><span class="dot" style="background:var(--meat)"></span>בשרי</label>
+          <input type="radio" name="k" id="k2" value="dairy"><label for="k2"><span class="dot" style="background:var(--dairy)"></span>חלבי</label>
+          <input type="radio" name="k" id="k3" value="parve" checked><label for="k3"><span class="dot" style="background:var(--parve)"></span>פרווה</label>
+        </div></div>
+      <div><div class="label" style="margin-bottom:8px">רמת קושי</div>
+        <div class="seg" role="radiogroup" aria-label="רמת קושי">
+          <input class="neutral" type="radio" name="d" id="d1" value="easy" checked><label for="d1">קל</label>
+          <input class="neutral" type="radio" name="d" id="d2" value="medium"><label for="d2">בינוני</label>
+          <input class="neutral" type="radio" name="d" id="d3" value="hard"><label for="d3">מושקע</label>
+        </div></div>
+      <label class="field" style="max-width:120px"><span>מנות</span><input class="input" type="number" id="serv" min="1" max="40" value="12"></label>
+    </div>
+  </section>
+
+  <section class="panel gen" id="result" aria-live="polite"></section>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+MT.mount('request');
+const $=s=>document.querySelector(s);
+const OCC=[['🎂','יום הולדת'],['🍽️','ארוחת ערב'],['☕','כיבוד לאורחים'],['🧒','ארוחה לילדים'],['🥪','קופסת אוכל'],['🕯️','שבת או חג']];
+const IDEAS=['עוגת יום הולדת שוקולד','פשטידה לארוחת ערב','מאפינס לקופסת אוכל','שניצל אפוי לילדים','עוגיות לאורחים'];
+let occ=null;
+$('#occ').innerHTML=OCC.map(o=>`<button class="chip-btn" aria-pressed="false" data-o="${o[1]}">${o[0]} ${o[1]}</button>`).join('');
+$('#ideas').innerHTML=IDEAS.map(i=>`<button type="button">${i}</button>`).join('');
+const upd=()=>{const v=$('#ask').value.trim();$('#cnt').textContent=$('#ask').value.length+'/200';$('#gen').disabled=v.length<3;$('#gen').classList.toggle('is-ready',v.length>=3);};
+$('#ask').addEventListener('input',upd);
+$('#ask').addEventListener('keydown',e=>{if(e.key==='Enter'&&!$('#gen').disabled)$('#gen').click();});
+$('#ideas').addEventListener('click',e=>{const b=e.target.closest('button');if(b){$('#ask').value=b.textContent;upd();}});
+$('#occ').addEventListener('click',e=>{const b=e.target.closest('[data-o]');if(!b)return;
+  const on=b.getAttribute('aria-pressed')!=='true'; document.querySelectorAll('#occ [data-o]').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed',on); occ=on?b.dataset.o:null; $('#shabbatHint').style.display=occ==='שבת או חג'?'flex':'none';});
+if(MT.qs.get('q')){ $('#ask').value=MT.qs.get('q'); document.querySelector('[data-o="יום הולדת"]').click(); upd(); MT.toast('העוזר מילא את הבקשה','✨'); }
+
+const CAKE={e:'🎂',h:25,g:['🍫','✨'],img:null,
+  title:'עוגת יום הולדת שוקולד עם קרם גנאש ומספר מסוכריות',
+  desc:'שתי שכבות עוגת שוקולד לחה על בסיס שמן, ביניהן ומעליהן קרם גנאש מריר, ומספר הגיל מסוכריות צבעוניות. פרווה, כך שמתאימה גם אחרי ארוחה בשרית.',
+  ing:[['קמח','2½ כוסות'],['סוכר','2 כוסות'],['קקאו','¾ כוס'],['ביצים','3 יח׳'],['שמן','1 כוס'],['מים רותחים','1 כוס'],['אבקת אפייה','2 כפיות'],['שוקולד מריר פרווה','200 גרם'],['קרם קוקוס','¾ כוס'],['סוכריות צבעוניות','לקישוט']],
+  steps:['מחממים תנור ל-170 מעלות ומשמנים שתי תבניות עגולות בקוטר 24.','מערבבים בקערה קמח, סוכר, קקאו ואבקת אפייה. מוסיפים ביצים ושמן, ובסוף את המים הרותחים, עד לבלילה חלקה.','מחלקים בין התבניות ואופים 30–35 דקות, עד שקיסם יוצא עם פירורים לחים. מצננים לגמרי.','מחממים את קרם הקוקוס עד סף רתיחה, יוצקים על השוקולד הקצוץ ומערבבים לגנאש חלק. מצננים עד שמסמיך.','מורחים גנאש בין השכבות ומעל, ומסדרים מסוכריות את מספר הגיל במרכז העוגה.']};
+const msgs=['מבינים את הבקשה…','מתאימים לאירוע…','בודקים כשרות…'];
+$('#gen').addEventListener('click',async()=>{
+  const q=$('#ask').value.trim(), k=document.querySelector('input[name=k]:checked').value, d=document.querySelector('input[name=d]:checked').value, serv=$('#serv').value;
+  const cake=/עוגה|עוגת|יום הולדת/.test(q);
+  const R=cake?CAKE:{e:'🍽️',h:200,g:['🌿','✨'],title:q.replace(/^(מתכון ל|תן לי |אני רוצה )/,''),desc:`מנה ${MT.KFEM[k]} שנוצרה לפי הבקשה שלכם${occ?' ל'+occ:''}, ברמת קושי ${{easy:'קלה',medium:'בינונית',hard:'מושקעת'}[d]}.`,
+     ing:[['בצל','1 יח׳'],['שום','2 שיניים'],['שמן זית','2 כפות'],['מלח ופלפל','לפי הטעם']],steps:['מכינים את המצרכים ומחממים את המחבת.','מבשלים לפי השלבים עד שהמנה מוכנה.','טועמים, מתקנים תיבול ומגישים.']};
+  const box=$('#result'); box.classList.add('show');
+  box.innerHTML=`<div class="gen-top"><div>${MT.artEmoji({...R,title:R.title})}</div><div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${MT.kchip(cake?'parve':k)}<span class="tag">✍️ לפי בקשה</span>${occ?`<span class="tag">${occ}</span>`:''}<span class="tag">${serv} מנות</span></div>
+    <h2 id="rt"><span class="sk" style="display:block;height:38px;width:80%"></span></h2>
+    <p id="rd" style="color:var(--ink-2)"><span class="loading-line"><span class="spinner"></span><span id="lm">${msgs[0]}</span></span></p></div></div>
+    ${cake&&k!=='parve'?'<div class="notice info" style="margin-top:var(--s4)"><span class="ni">ℹ️</span><span>המתכון נבנה כפרווה כי אין בו צורך במצרכים בשריים או חלביים. אפשר להמיר לחלבי בעמוד המתכון.</span></div>':''}
+    <div class="gen-cols"><div><h4>מצרכים</h4><ul class="ing-list" id="ri"></ul></div><div><h4>אופן ההכנה</h4><ol class="steps-list" id="rs"></ol></div></div>
+    <div class="notice" style="margin-top:var(--s5)"><span class="ni">💡</span><span><b>בקשה:</b> „${q.replace(/</g,'&lt;')}”. לא בדיוק מה שרציתם? כתבו תיקון קצר, למשל „בלי ביצים” או „יותר קטנה”.</span></div>
+    <div class="ask-row"><input class="input" id="refine" maxlength="120" placeholder="תיקון למתכון (לא חובה)" style="font-size:1rem;padding:12px 14px"><button class="btn btn-ghost" id="refBtn">עדכון המתכון</button></div>
+    <div style="display:flex;gap:var(--s3);margin-top:var(--s5);flex-wrap:wrap;align-items:center"><a class="btn btn-primary" href="recipe.html?id=r8">פתיחת המתכון המלא</a><a class="btn btn-accent" href="cook.html">👨‍🍳 מצב בישול</a><button class="btn btn-ghost" data-fav>שמירה למועדפים</button><a class="btn btn-ghost" href="shopping.html">${MT.I.cart} לרשימת קניות</a><span class="hint" style="margin-inline-start:auto">✓ עבר בדיקת כשרות בשרת</span></div>`;
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+  let mi=0; const iv=setInterval(()=>{const l=$('#lm'); if(l) l.textContent=msgs[++mi%3]},700);
+  await MT.wait(1700); clearInterval(iv);
+  await MT.stream($('#rt'),R.title,18); await MT.stream($('#rd'),R.desc,5);
+  for(const x of R.ing){ $('#ri').insertAdjacentHTML('beforeend',`<li style="animation:pop .3s"><span>${x[0]}</span><b>${x[1]}</b></li>`); await MT.wait(100); }
+  for(const s of R.steps){const li=document.createElement('li');$('#rs').appendChild(li);await MT.stream(li,s,4);}
+  $('#refBtn').addEventListener('click',()=>{const v=$('#refine').value.trim(); if(!v) return; MT.toast(`המתכון מתעדכן: „${v.replace(/</g,'&lt;')}”`,'✨'); $('#refine').value='';});
+});
+upd();
+</script>
+</body>
+</html>

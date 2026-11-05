@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מטעמים · מתכונים שנולדים מהמשחק</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍲</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div id="content">
+
+  <section class="hero" aria-labelledby="heroTitle">
+    <div>
+      <h1 id="heroTitle">שלושה מצרכים.<span class="line2">מנה אחת שלא הכרתם.</span></h1>
+      <p class="lead">סובבו את הגלגל, מזגו שני מטבחים או תנו לנו לבנות את תפריט השבת. כל מתכון נוצר במיוחד בשבילכם, מסווג בשרי, חלבי או פרווה, ומוכן לבישול.</p>
+      <div class="ctas">
+        <a href="wheel.html" class="btn btn-accent btn-lg">לסובב את הגלגל</a>
+        <a href="request.html" class="btn btn-ghost btn-lg">לבקש מתכון</a>
+        <a href="menu-planner.html" class="btn btn-ghost btn-lg">לתכנן תפריט לשבת</a>
+      </div>
+      <div class="hero-stats">
+        <div><b>5</b>דרכים להמציא מנה</div>
+        <div><b>12</b>מטבחים למיזוג</div>
+        <div><b>0</b>ערבוב בשר וחלב</div>
+      </div>
+    </div>
+
+    <div class="slot" aria-label="הדגמה: גלגל האתגר">
+      <div class="slot-top"><span>סיבוב לדוגמה · פרווה · מאתגר</span>
+        <button class="btn btn-accent btn-sm" id="spinDemo">סובבו</button></div>
+      <div class="slot-reels" id="reels"></div>
+      <div class="slot-result" id="slotResult">
+        <div class="art" style="--h:30"><span class="plate"></span><span class="food">🍠</span></div>
+        <div><h4>בטטה צלויה בטחינה, זעתר ותמרים</h4><p>נוצר מ: בטטה · טחינה · תמרים</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features five" aria-label="הפיצ׳רים">
+    <a href="wheel.html" class="feature f-wheel">
+      <span class="ico" aria-hidden="true">🎡</span>
+      <h3>גלגל האתגר</h3>
+      <p>שלושה מצרכים בהגרלה, שלוש רמות קושי. לא אהבתם מצרך? מסובבים רק אותו מחדש.</p>
+      <span class="go">לסובב עכשיו <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+      <svg class="deco" viewBox="0 0 200 200" aria-hidden="true">
+        <g transform="translate(100 100)">
+          <circle r="96" fill="#F2A922"/><circle r="96" fill="none" stroke="#fff" stroke-width="4"/>
+          <path d="M0 0L0 -96A96 96 0 0 1 83 -48Z" fill="#3D2352"/><path d="M0 0L83 48A96 96 0 0 1 0 96Z" fill="#3D2352"/><path d="M0 0L-83 48A96 96 0 0 1 -83 -48Z" fill="#3D2352"/>
+          <circle r="22" fill="#fff"/></g></svg>
+    </a>
+    <a href="fusion.html" class="feature f-fusion">
+      <span class="ico" aria-hidden="true">🔀</span>
+      <h3>מיזוג מטבחים</h3>
+      <p>גוררים כרטיס מרוקאי אל כרטיס יפני ומקבלים מנה חדשה עם הסבר מה הגיע מכל צד.</p>
+      <span class="go">למזג מטבחים <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+    </a>
+    <a href="request.html" class="feature f-request">
+      <span class="ico" aria-hidden="true">✍️</span>
+      <h3>מתכון לפי בקשה</h3>
+      <p>עוגת יום הולדת, ארוחת ערב או כיבוד לאורחים. כותבים מה רוצים ומקבלים מתכון חדש.</p>
+      <span class="go">לבקש מתכון <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+    </a>
+    <a href="pantry.html" class="feature f-pantry">
+      <span class="ico" aria-hidden="true">🧺</span>
+      <h3>מה יש לי</h3>
+      <p>כותבים מה יש במקרר ובארון, ומקבלים מתכון שמנצל את זה, עם סימון של מה חסר.</p>
+      <span class="go">ליצור ממה שיש <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+    </a>
+    <a href="menu-planner.html" class="feature f-menu">
+      <span class="ico" aria-hidden="true">🕯️</span>
+      <h3>תפריט שבת וחג</h3>
+      <p>מספר סועדים, סוג סעודה וסוג כשרות. מקבלים תפריט מאוזן, לוח הכנה ורשימת קניות אחת.</p>
+      <span class="go">לבנות תפריט <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+    </a>
+  </section>
+
+  <section class="tools-strip" aria-label="כלים במטבח">
+    <a class="tool" href="cook.html"><span class="ti">👨‍🍳</span><div><b>מצב בישול</b><span>שלב אחר שלב, טיימרים והקראה</span></div></a>
+    <a class="tool" href="recipe.html?servings=16"><span class="ti">⚖️</span><div><b>שינוי כמויות</b><span>מ-1 עד 40 מנות</span></div></a>
+    <a class="tool" href="recipe.html?sub=i4"><span class="ti">🔄</span><div><b>אין לי את זה</b><span>תחליף שתואם את הכשרות</span></div></a>
+    <a class="tool" href="shopping.html"><span class="ti">🛒</span><div><b>רשימת קניות</b><span>מאוחדת לפי מחלקות</span></div></a>
+  </section>
+
+  <section style="margin-top:var(--s8)" aria-labelledby="latestTitle">
+    <div class="sec-head">
+      <div><h2 id="latestTitle">נוצרו עכשיו באתר</h2><p>מתכונים טריים מהגלגל, מהמיזוג ומתפריטי שבת</p></div>
+      <div class="filters" role="group" aria-label="סינון לפי כשרות">
+        <button class="chip-btn" aria-pressed="true" data-f="all">הכול</button>
+        <button class="chip-btn" aria-pressed="false" data-f="meat">בשרי</button>
+        <button class="chip-btn" aria-pressed="false" data-f="dairy">חלבי</button>
+        <button class="chip-btn" aria-pressed="false" data-f="parve">פרווה</button>
+      </div>
+    </div>
+    <div class="grid grid-3" id="latest"></div>
+    <div style="text-align:center;margin-top:var(--s6)"><button class="btn btn-ghost" id="more">הצגת מתכונים נוספים</button></div>
+  </section>
+
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+MT.mount('index');
+const latest=document.getElementById('latest');
+const render=f=>latest.innerHTML=MT.recipes.filter(r=>f==='all'||r.k===f).slice(0,9).map(r=>MT.card(r,{ago:true})).join('');
+render('all');
+document.querySelectorAll('.filters [data-f]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.filters [data-f]').forEach(x=>x.setAttribute('aria-pressed',x===b));render(b.dataset.f);}));
+document.getElementById('more').addEventListener('click',()=>{latest.innerHTML+=MT.recipes.slice(9).map(r=>MT.card(r,{ago:true})).join('');document.getElementById('more').remove();});
+
+/* Hero slot demo */
+const pool=MT.wheel.parve;
+const combos=[
+  [['🍆','חציל'],['🍋','לימון כבוש'],['🌰','שקדים'],'חציל שרוף עם לימון כבוש ופרורי שקדים',280,'🍆','eggplant'],
+  [['🍠','בטטה'],['🥜','טחינה'],['🌴','תמרים'],'בטטה צלויה בטחינה, זעתר ותמרים',30,'🍠'],
+  [['🎃','דלעת'],['🫚','ג׳ינג׳ר'],['🥥','קוקוס'],'מרק דלעת, ג׳ינג׳ר וחלב קוקוס',28,'🥣'],
+  [['🫘','עדשים'],['🌶️','חריסה'],['🥕','גזר'],'תבשיל עדשים כתומות בחריסה וגזר',14,'🍲']
+];
+const reels=document.getElementById('reels');
+reels.innerHTML=[0,1,2].map(i=>`<div class="reel"><div class="reel-strip" id="strip${i}"></div></div>`).join('');
+let ci=0;
+function fill(target){
+  [0,1,2].forEach(i=>{
+    const s=document.getElementById('strip'+i);
+    const items=[]; for(let k=0;k<14;k++){const p=pool[(k*7+i*5+ci*3)%pool.length];items.push(p);} items.push([target[i][0],target[i][1]]);
+    s.style.transition='none'; s.style.transform='translateY(0)';
+    s.innerHTML=items.map(p=>`<div class="reel-item"><span class="e">${p[0]}</span><span>${p[1]}</span></div>`).join('');
+    void s.offsetHeight;
+    s.style.transition=`transform ${1.2+i*.35}s cubic-bezier(.12,.75,.15,1)`;
+    const h=s.querySelector('.reel-item').offsetHeight;
+    s.style.transform=`translateY(-${h*(items.length-1)}px)`;
+  });
+}
+function initial(){[0,1,2].forEach(i=>{document.getElementById('strip'+i).innerHTML=`<div class="reel-item"><span class="e">${combos[0][i][0]}</span><span>${combos[0][i][1]}</span></div>`});}
+initial();
+document.getElementById('slotResult').innerHTML=`${MT.art({img:'eggplant',title:combos[0][3]})}<div><h4>${combos[0][3]}</h4><p>נוצר מ: חציל · לימון כבוש · שקדים</p></div>`;
+document.getElementById('spinDemo').addEventListener('click',async()=>{
+  ci=(ci+1)%combos.length; const c=combos[ci]; fill(c);
+  const res=document.getElementById('slotResult');
+  res.innerHTML='<div class="loading-line"><span class="spinner"></span>יוצרים מתכון מהשילוב…</div>';
+  await MT.wait(2100);
+  res.innerHTML=`${c[6]?MT.art({img:c[6],title:c[3]}):`<div class="art" style="--h:${c[4]}"><span class="plate"></span><span class="food">${c[5]}</span></div>`}<div><h4></h4><p>נוצר מ: ${c[0][1]} · ${c[1][1]} · ${c[2][1]} · <a class="link" href="wheel.html?k=parve&d=medium">לגלגל המלא</a></p></div>`;
+  MT.stream(res.querySelector('h4'),c[3],20);
+});
+</script>
+</body>
+</html>

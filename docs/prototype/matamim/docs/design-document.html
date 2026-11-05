@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מסמך עיצוב · מטעמים v1.0</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📘</text></svg>">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<style>
+  body{background:var(--surface)}
+  .doc{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+  .toc{position:sticky;top:0;height:100vh;overflow:auto;background:var(--bg);border-inline-end:1px solid var(--line);padding:28px 18px}
+  .toc a{display:block;padding:7px 12px;border-radius:10px;font-size:.9rem;color:var(--ink-2)}
+  .toc a:hover{background:var(--aubergine-100);color:var(--aubergine-800)}
+  .toc .grp{font-size:.78rem;color:var(--muted);font-weight:600;margin:16px 12px 4px}
+  article{padding:56px clamp(24px,5vw,80px) 120px;max-width:1080px}
+  article > section{padding-top:56px;margin-top:56px;border-top:1px solid var(--line)}
+  article > section:first-of-type{border:0;margin:0;padding:0}
+  article h1{font-size:clamp(2.4rem,2rem+2vw,3.6rem);color:var(--aubergine-900)}
+  article h2{font-size:2rem;color:var(--aubergine-900);margin-bottom:12px}
+  article h3{font-size:1.15rem;margin:28px 0 10px}
+  article p,article li{max-width:72ch;color:var(--ink-2)}
+  article p + p{margin-top:12px}
+  article ul{padding-inline-start:20px}
+  .lead{font-size:1.15rem;margin-top:12px}
+  .meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+  .sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-top:16px}
+  .sw{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface)}
+  .sw i{display:block;height:84px}
+  .sw div{padding:10px 12px;font-size:.84rem}
+  .sw b{display:block;font-size:.92rem}
+  .sw code{font-size:.8rem;color:var(--muted)}
+  .kbig{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+  .kbig > div{border-radius:20px;padding:20px;color:#fff}
+  .kbig b{font-family:var(--font-display);font-size:1.8rem;display:block}
+  .kbig small{opacity:.85}
+  .type-row{display:grid;grid-template-columns:160px 1fr;gap:20px;align-items:baseline;padding:14px 0;border-bottom:1px dashed var(--line)}
+  .type-row code{font-size:.8rem;color:var(--muted)}
+  .demo{border:1px solid var(--line);border-radius:20px;padding:24px;background:var(--bg);margin-top:14px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .demo.col{flex-direction:column;align-items:stretch}
+  pre.wire{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;line-height:1.45;background:var(--aubergine-900);color:#E5DCEE;border-radius:16px;padding:20px;overflow:auto;direction:ltr;text-align:left}
+  table.spec{width:100%;border-collapse:collapse;font-size:.92rem;margin-top:14px}
+  .spec th{text-align:start;background:var(--bg);color:var(--muted);font-weight:600;font-size:.82rem;padding:10px 12px;border-bottom:1px solid var(--line)}
+  .spec td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  .spec code{font-size:.82rem;background:var(--bg);padding:1px 6px;border-radius:6px;direction:ltr;display:inline-block}
+  .princ{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}
+  .princ div{border:1px solid var(--line);border-radius:18px;padding:20px}
+  .princ b{font-family:var(--font-display);font-size:1.25rem;display:block;margin-bottom:6px}
+  .dodont{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  .dodont > div{border-radius:16px;padding:16px;border:1px solid}
+  .dodont .do{background:var(--parve-soft);border-color:var(--parve-line)}
+  .dodont .dont{background:var(--meat-soft);border-color:var(--meat-line)}
+  .dodont h4{margin-bottom:6px}
+  @media(max-width:900px){.doc{grid-template-columns:1fr}.toc{position:static;height:auto}.kbig,.princ,.dodont{grid-template-columns:1fr}}
+  @media print{.toc{display:none}.doc{display:block}}
+</style>
+</head>
+<body>
+<div class="doc">
+<nav class="toc" aria-label="תוכן העניינים">
+  <a href="../presentation.html" class="logo" style="font-size:1.3rem;margin-bottom:10px" id="lg"></a>
+  <div class="grp">יסודות</div>
+  <a href="#concept">קונספט</a><a href="#principles">עקרונות</a><a href="#color">צבע</a><a href="#type">טיפוגרפיה</a><a href="#space">מרווח, רדיוס וצל</a><a href="#art">איור המנה ואייקונים</a>
+  <div class="grp">רכיבים</div>
+  <a href="#components">ספריית רכיבים</a><a href="#assistant">העוזר</a><a href="#states">מצבים</a>
+  <div class="grp">מערכת</div>
+  <a href="#layout">פריסה ונקודות שבירה</a><a href="#motion">תנועה</a><a href="#a11y">נגישות</a><a href="#i18n">עברית ואנגלית</a>
+  <div class="grp">מסכים</div>
+  <a href="#screens">הנחיות לכל מסך</a><a href="#copy">כתיבה ומונחים</a><a href="#handoff">מסירה לפיתוח</a>
+</nav>
+
+<article>
+<section id="concept">
+  <span class="tag">מסמך עיצוב · גרסה 1.0 · 5 בנובמבר 2026</span>
+  <h1 style="margin-top:16px">מטעמים: שפת עיצוב</h1>
+  <p class="lead">אתר מתכונים שבו כל מנה נוצרת על ידי AI, דרך משחק וגילוי. העיצוב צריך להחזיק שני דברים בבת אחת: <b>שובבות</b> שמזמינה לסובב עוד פעם, ו<b>אמינות</b> של מטבח שבו אין ערבוב בין בשר וחלב.</p>
+  <p>השם "מטעמים" נבחר כי הוא מילה עברית מוכרת, חמה וקצרה, שמתאימה גם לתפריט שבת וגם לניסוי מטורף מהגלגל. הלוגו הוא צלחת עם שוליים מקווקווים בצבע זעפרן, שמזכירה גם גלגל וגם חיוך.</p>
+  <div class="meta-row"><span class="tag">קהל: רחב, מחשב קודם ומובייל מלא</span><span class="tag">שפות: עברית (RTL) ואנגלית (LTR)</span><span class="tag">טכנולוגיה: React + TypeScript</span></div>
+</section>
+
+<section id="principles">
+  <h2>ארבעה עקרונות</h2>
+  <div class="princ">
+    <div><b>הכשרות היא מערכת, לא קישוט</b>אדום לבשרי, כחול לחלבי, ירוק לפרווה. הצבעים האלה שמורים לסיווג בלבד ומופיעים תמיד באותה צורה: תג עם נקודה. שום רכיב אחר באתר לא משתמש בהם.</div>
+    <div><b>רגע אחד בולט בכל מסך</b>בבית זה מכונת המזל, בגלגל זה הגלגל, במיזוג זה אזור המיזוג. כל השאר שקט: לבן, חציל וזעפרן במינון נמוך.</div>
+    <div><b>המשתמש לוחץ, ה-AI מכין</b>העוזר והמערכת ממלאים הגדרות, אבל הפעולה עצמה נשארת בלחיצה אחת של המשתמש. הכפתור שמחכה מסומן בהבהוב זעפרן עדין.</div>
+    <div><b>מטבח אמיתי, ידיים מלוכלכות</b>מצב בישול עם טקסט גדול, כפתורים רחבים, ניגודיות גבוהה ותמיכה במקלדת, בהחלקה ובקול.</div>
+  </div>
+</section>
+
+<section id="color">
+  <h2>צבע</h2>
+  <p>הבסיס הוא <b>חציל</b> כהה, צבע עמוק ושקט שעובד היטב עם צילומי אוכל ועם צבעי הכשרות. <b>זעפרן</b> הוא צבע הפעולה המשחקית: סיבוב, מיזוג, "צור". הרקע אפור-לילך בהיר שמבדיל כרטיסים לבנים בלי צללים כבדים.</p>
+  <h3>מותג</h3>
+  <div class="sw-grid">
+    <div class="sw"><i style="background:#1E1029"></i><div><b>חציל 900</b><code>#1E1029</code><br>רקע מצב בישול, ניהול</div></div>
+    <div class="sw"><i style="background:#2C1840"></i><div><b>חציל 800 · ראשי</b><code>#2C1840</code><br>כפתור ראשי, כותרות, Hero</div></div>
+    <div class="sw"><i style="background:#3D2352"></i><div><b>חציל 700</b><code>#3D2352</code><br>Hover, קישורים</div></div>
+    <div class="sw"><i style="background:#EFE9F4"></i><div><b>חציל 100</b><code>#EFE9F4</code><br>רקע בחירה, כפתור רך</div></div>
+    <div class="sw"><i style="background:#F2A922"></i><div><b>זעפרן 500 · פעולה</b><code>#F2A922</code><br>סובבו, מזג!, מצב בישול</div></div>
+    <div class="sw"><i style="background:#FDF2D9"></i><div><b>זעפרן 100</b><code>#FDF2D9</code><br>כרטיס פעולה של העוזר, אזהרה</div></div>
+  </div>
+  <h3>קוד הכשרות</h3>
+  <p>מבוסס על קוד הצבעים המוכר במטבחים כשרים. כל צבע מגיע בשלושה גוונים: מלא (טקסט ונקודה), רך (רקע תג) וקו (מסגרת).</p>
+  <div class="kbig">
+    <div style="background:var(--meat)"><b>בשרי</b><code style="color:#fff">#B3263E</code><br><small>לבן עליו 6.4:1 · על הרקע הרך 5.5:1</small></div>
+    <div style="background:var(--dairy)"><b>חלבי</b><code style="color:#fff">#2463B0</code><br><small>לבן עליו 6.0:1 · על הרקע הרך 5.2:1</small></div>
+    <div style="background:var(--parve)"><b>פרווה</b><code style="color:#fff">#25744A</code><br><small>לבן עליו 5.7:1 · על הרקע הרך 5.0:1</small></div>
+  </div>
+  <div class="dodont">
+    <div class="do"><h4>✓ כן</h4><ul><li>תג כשרות בכל כרטיס מתכון, בכותרת המתכון ובכל מנה בתפריט.</li><li>אותה צורה תמיד: נקודה + מילה. לא להסתמך על צבע בלבד.</li></ul></div>
+    <div class="dont"><h4>✕ לא</h4><ul><li>להשתמש באדום להודעת שגיאה ליד מתכון בשרי. לשגיאות יש גוון נפרד <code>#C0352B</code> ותמיד אייקון.</li><li>לצבוע כפתורים או רקעים כלליים בצבעי הכשרות.</li></ul></div>
+  </div>
+  <h3>ניטרליים ומשוב</h3>
+  <div class="sw-grid">
+    <div class="sw"><i style="background:#F3F2F6"></i><div><b>רקע</b><code>#F3F2F6</code></div></div>
+    <div class="sw"><i style="background:#FFFFFF;border-bottom:1px solid var(--line)"></i><div><b>משטח</b><code>#FFFFFF</code></div></div>
+    <div class="sw"><i style="background:#E3DFEA"></i><div><b>קו</b><code>#E3DFEA</code></div></div>
+    <div class="sw"><i style="background:#1D1828"></i><div><b>דיו</b><code>#1D1828</code> · 15.5:1</div></div>
+    <div class="sw"><i style="background:#6F6880"></i><div><b>משני</b><code>#6F6880</code> · 4.75:1</div></div>
+    <div class="sw"><i style="background:#C0352B"></i><div><b>שגיאה</b><code>#C0352B</code></div></div>
+  </div>
+</section>
+
+<section id="type">
+  <h2>טיפוגרפיה</h2>
+  <p>שתי משפחות בלבד, עם תפקידים ברורים. <b>Frank Ruhl Libre</b> בכותרות: גופן עברי קלאסי עם עיטור של ספר, שנותן למנה תחושה של "משהו ששווה להגיש". <b>IBM Plex Sans Hebrew</b> לממשק ולטקסט: נקי, קריא בגדלים קטנים, ומשלב עברית ואנגלית באותו משקל חזותי.</p>
+  <div class="type-row"><code>Display · 900<br>clamp 42–68px</code><span class="display" style="font-size:3.4rem;line-height:1">שלושה מצרכים</span></div>
+  <div class="type-row"><code>H1 · 900<br>clamp 32–46px</code><h1 style="font-size:2.6rem">גלגל האתגר</h1></div>
+  <div class="type-row"><code>H2 · 900 · 24–32px</code><h2 style="margin:0">נוצרו עכשיו באתר</h2></div>
+  <div class="type-row"><code>כותרת כרטיס · Frank 700 · 20px</code><span style="font-family:var(--font-display);font-weight:700;font-size:1.28rem">צלי בקר בסילאן ורימונים</span></div>
+  <div class="type-row"><code>H3 · Plex 700 · 20px</code><h3 style="margin:0">מצרכים</h3></div>
+  <div class="type-row"><code>גוף · Plex 400 · 16/1.6</code><p style="margin:0">צלי כתף רך שמתבשל לאט ברוטב סילאן, יין אדום ופרחי רימון.</p></div>
+  <div class="type-row"><code>קטן · Plex 400 · 14px</code><span style="font-size:.875rem;color:var(--muted)">לפני 4 דק׳ · 8 מנות</span></div>
+  <div class="type-row"><code>מצב בישול · Frank 700<br>clamp 30–51px</code><span style="font-family:var(--font-display);font-weight:700;font-size:2rem;line-height:1.3">מחממים את שמן הזית בסיר ברזל רחב</span></div>
+  <p style="margin-top:16px">כללים: אורך שורה עד 72 תווים. ללא אותיות רישיות לתוויות באנגלית. מספרים בכמויות וטיימרים עם <code>font-variant-numeric: tabular-nums</code> כדי שלא "יקפצו".</p>
+</section>
+
+<section id="space">
+  <h2>מרווח, רדיוס וצל</h2>
+  <p>סולם מרווחים על בסיס 4: <code>4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96</code>. רדיוס הוא היררכיה: ככל שהאלמנט גדול ומכיל יותר, הוא עגול יותר.</p>
+  <table class="spec"><thead><tr><th>רמה</th><th>רדיוס</th><th>שימוש</th></tr></thead><tbody>
+    <tr><td>מעטפת</td><td><code>32px</code></td><td>Hero, תמונת מתכון גדולה, באנר תפריט</td></tr>
+    <tr><td>פאנל</td><td><code>24px</code></td><td>פאנלים, חלונות, אזור המיזוג</td></tr>
+    <tr><td>כרטיס</td><td><code>18px</code></td><td>כרטיס מתכון, כרטיס מטבח, מצרך בגלגל</td></tr>
+    <tr><td>שדה</td><td><code>12px</code></td><td>שדות קלט, בחירות ברשימה</td></tr>
+    <tr><td>גלולה</td><td><code>999px</code></td><td>כפתורים, תגים, בוררים</td></tr>
+  </tbody></table>
+  <h3>צל</h3>
+  <div class="demo"><div class="card" style="padding:18px;box-shadow:var(--e1)">e1 · מנוחה</div><div class="card" style="padding:18px;box-shadow:var(--e2)">e2 · פאנל</div><div class="card" style="padding:18px;box-shadow:var(--e3)">e3 · ריחוף וחלון</div></div>
+  <p style="margin-top:12px">הצללים צבועים בגוון חציל ולא באפור, כדי שהמשטחים ייראו חמים ולא "מלוכלכים".</p>
+</section>
+
+<section id="art">
+  <h2>איור המנה ואייקונים</h2>
+  <p>כל מתכון מקבל <b>איור מנה במבט מלמעלה</b>: שולחן בצבע שנגזר מהמנה, מפית פשתן, מזלג, צלחת או כלי בישול, והמנה עצמה עם קישוטים. האיורים הם קובצי SVG (בתיקייה <code>assets/img</code>), קלים מאוד, חדים בכל גודל, ומשמרים שפה אחידה בין כל המתכונים. כל איור מציג מזון וכלים בלבד.</p>
+  <p>לכל מנה בלי איור ייעודי (למשל מנה חדשה מהגלגל) מוצג איור גיבוי: צלחת על רקע צבעוני עם אימוג׳י המנה, כך שאין אף פעם מסגרת ריקה.</p>
+  <div class="demo" id="artDemo" style="display:grid;grid-template-columns:repeat(4,1fr)"></div>
+  <p style="margin-top:12px">במימוש: הרכיב <code>&lt;DishArt&gt;</code> מקבל <code>src</code> אופציונלי. אם יוחלט בהמשך על יצירת תמונות אוטומטית לכל מתכון, היא תחליף את האיור, והאיור יישאר כמצב טעינה וגיבוי. הנחיית יצירת התמונה תגדיר מזון וכלים בלבד, במבט מלמעלה.</p>
+  <p>אייקונים: קווי, עובי 2px, פינות מעוגלות, 18px בכפתורים. אימוג׳י משמשים רק לתוכן (מצרכים, מטבחים, מחלקות), לא לפעולות ניווט.</p>
+</section>
+
+<section id="components">
+  <h2>ספריית רכיבים</h2>
+  <p>כל הרכיבים כאן חיים: אותו CSS בדיוק כמו באב-הטיפוס.</p>
+  <h3>כפתורים</h3>
+  <div class="demo">
+    <button class="btn btn-primary">פעולה ראשית</button><button class="btn btn-accent">סובבו</button><button class="btn btn-ghost">משנית</button><button class="btn btn-soft">רכה</button><button class="btn btn-primary" disabled>לא זמין</button><button class="btn btn-accent is-ready">מחכה ללחיצה</button>
+  </div>
+  <table class="spec"><tbody>
+    <tr><td><b>ראשי</b> חציל</td><td>פעולה אחת עיקרית במסך: "בנה תפריט", "התחברות", "הוספה לרשימה".</td></tr>
+    <tr><td><b>זעפרן</b></td><td>פעולה משחקית או יצירתית: "סובבו", "מזג!", "צור מתכונים", "מצב בישול".</td></tr>
+    <tr><td><b>מחכה ללחיצה</b></td><td>כשהעוזר הכין את המסך. הבהוב טבעת זעפרן, נעצר בלחיצה ומכבד <code>prefers-reduced-motion</code>.</td></tr>
+  </tbody></table>
+  <h3>תגי כשרות ותגים</h3>
+  <div class="demo"><span class="k-chip k-meat">בשרי</span><span class="k-chip k-dairy">חלבי</span><span class="k-chip k-parve">פרווה</span><span class="tag">עיקרית</span><span class="tag">🎡 גלגל האתגר</span></div>
+  <h3>בורר כשרות (חובה בכל יצירה)</h3>
+  <div class="demo"><div class="seg" role="radiogroup" aria-label="דוגמה"><input type="radio" name="dk" id="dk1" value="meat" checked><label for="dk1"><span class="dot" style="background:var(--meat)"></span>בשרי</label><input type="radio" name="dk" id="dk2" value="dairy"><label for="dk2"><span class="dot" style="background:var(--dairy)"></span>חלבי</label><input type="radio" name="dk" id="dk3" value="parve"><label for="dk3"><span class="dot" style="background:var(--parve)"></span>פרווה</label></div>
+    <div class="seg"><input class="neutral" type="radio" name="dt" id="dt1" checked><label for="dt1">ראשונה</label><input class="neutral" type="radio" name="dt" id="dt2"><label for="dt2">עיקרית</label><input class="neutral" type="radio" name="dt" id="dt3"><label for="dt3">קינוח</label></div></div>
+  <h3>שדות</h3>
+  <div class="demo col" style="max-width:520px">
+    <label class="field"><span>אימייל</span><input class="input" placeholder="name@example.com"></label>
+    <div style="display:flex;gap:16px;align-items:center"><span class="label">מספר מנות</span><div class="stepper"><button>+</button><output>8</output><button>−</button></div></div>
+  </div>
+  <h3>כרטיס מתכון</h3>
+  <div class="demo" style="display:grid;grid-template-columns:repeat(3,1fr)" id="cardDemo"></div>
+  <table class="spec"><tbody><tr><td>מבנה</td><td>תווית מקור (גלגל/מיזוג/תפריט/המרה) · איור · לב שמירה · תג כשרות + סוג מנה · שם (Frank 700) · תיאור בשתי שורות · זמן כולל ומנות.</td></tr>
+  <tr><td>ריחוף</td><td>עולה 4px וצל e3. כל הכרטיס לחיץ אל עמוד המתכון; הלב פועל בנפרד.</td></tr></tbody></table>
+  <h3>הודעות</h3>
+  <div class="demo col"><div class="notice"><span class="ni">🏷️</span><span>הודעת מידע קבועה, למשל הערת הכשרות בתחתית המתכון.</span></div><div class="notice warn"><span class="ni">⚠️</span><span>אזהרה: הגדלתם את המתכון פי יותר מ-2.</span></div><div class="notice info"><span class="ni">ℹ️</span><span>מידע ניטרלי לפני פעולה.</span></div>
+  <div><button class="btn btn-ghost btn-sm" onclick="MT.toast('המתכון נשמר במועדפים <a href=../favorites.html>למועדפים</a>','❤')">הצגת Toast</button></div></div>
+  <h3>טעינה בזרימה</h3>
+  <div class="demo col"><span class="loading-line"><span class="spinner"></span>מאזנים טעמים…</span><span class="sk" style="height:16px;width:80%"></span><span class="sk" style="height:16px;width:60%"></span><h3 class="caret" style="margin:0;font-family:var(--font-display);font-size:1.6rem">כרעי עוף צלויות בכורכום</h3></div>
+</section>
+
+<section id="assistant">
+  <h2>העוזר</h2>
+  <p>במחשב: פאנל קבוע ברוחב 360px, <b>בצד שמאל בעברית</b> ובצד ימין באנגלית (לוגיקה: <code>inset-inline-end</code>). ניתן לכווץ ל-64px. במובייל: כפתור צף עגול בפינה התחתונה שפותח חלון מלמטה בגובה 78%.</p>
+  <p>כל פעולה שהעוזר מכין מוצגת כ<b>כרטיס פעולה</b> בזעפרן רך: מה הוכן (רשימה קצרה של ההגדרות) וכפתור אחד שמעביר לעמוד. בעמוד עצמו הכפתור הראשי מסומן "מחכה ללחיצה". העוזר לא מפעיל יצירה בעצמו.</p>
+  <div class="demo" style="background:var(--surface-2)"><div style="width:340px;display:flex;flex-direction:column;gap:10px">
+    <div class="msg user" style="align-self:flex-end">משהו חגיגי לליל שבת, בשרי, 12 איש</div>
+    <div class="msg bot">הכנתי לך את מתכנן התפריט עם ההגדרות. נשאר רק ללחוץ על "בנה תפריט".<div class="action-card"><div class="ac-title">✨ הוכן עבורך</div><ul><li>ליל שבת</li><li>12 סועדים</li><li>בשרי</li></ul><a class="btn btn-accent btn-sm" href="../menu-planner.html?preset=1">פתח את המתכנן</a></div></div>
+  </div></div>
+  <table class="spec"><thead><tr><th>כלי (function)</th><th>מה רואים בממשק</th></tr></thead><tbody>
+    <tr><td><code>navigate_to</code></td><td>מעבר עמוד, ללא כרטיס פעולה, רק אישור טקסט קצר</td></tr>
+    <tr><td><code>prepare_wheel / prepare_fusion / prepare_menu</code></td><td>כרטיס פעולה + הטופס ממולא + כפתור ראשי מהבהב</td></tr>
+    <tr><td><code>suggest_substitute</code></td><td>חלון התחליפים נפתח על המצרך</td></tr>
+    <tr><td><code>prepare_conversion</code></td><td>בורר המנות מתעדכן, או חלון ההמרה נפתח עם סוג היעד</td></tr>
+    <tr><td><code>prepare_shopping_list</code></td><td>חלון "הוספה לרשימת קניות" לאישור</td></tr>
+    <tr><td><code>start_cooking_mode</code></td><td>כרטיס פעולה עם "התחל לבשל"</td></tr>
+  </tbody></table>
+</section>
+
+<section id="states">
+  <h2>מצבים</h2>
+  <p>כל מצב עונה על שתי שאלות: מה קרה, ומה אפשר לעשות עכשיו. ראו את כל המצבים חיים ב<a class="link" href="../states.html">עמוד מצבי המערכת</a>.</p>
+  <table class="spec"><thead><tr><th>מצב</th><th>טיפול</th></tr></thead><tbody>
+    <tr><td>יצירה בזרימה</td><td>שלד שמתמלא: תגים ← כותרת (עם סמן) ← תיאור ← מצרכים אחד-אחד ← שלבים. הודעות טעינה מתחלפות כל 700ms.</td></tr>
+    <tr><td>דחיית כשרות</td><td>התצוגה מתנקה ומוצג "מכינים גרסה משופרת" עם מונה ניסיונות. אחרי 2 דחיות: כרטיס עם "ניסיון חוזר".</td></tr>
+    <tr><td>מכסה נגמרה (429)</td><td>כרטיס ידידותי עם הצעה להירשם ולינק למתכונים קיימים.</td></tr>
+    <tr><td>שגיאת רשת / timeout</td><td>הבחירות נשמרות, כפתור "ניסיון חוזר" אחד.</td></tr>
+    <tr><td>מנה שנכשלה בתפריט</td><td>רק הכרטיס שלה מסומן, עם "יצירת המנה מחדש" או "הצעת מנה אחרת".</td></tr>
+    <tr><td>ריק</td><td>אייקון, משפט שמסביר איך מגיעים לכאן, וכפתור לפעולה הראשונה.</td></tr>
+  </tbody></table>
+</section>
+
+<section id="layout">
+  <h2>פריסה ונקודות שבירה</h2>
+  <pre class="wire">DESKTOP ≥ 1100px  (Hebrew / RTL)
+┌──────────────────────────────────────────────┬──────────────┐
+│ [≡] מטעמים   בית · גלגל · מיזוג · תפריט ...  │  ◉ העוזר     │
+│                              [עב|EN] (י״כ)   │  ──────────  │
+├──────────────────────────────────────────────┤  bubbles     │
+│  main · max-width 1180 · padding 32          │              │
+│                                              │  chips       │
+│                                              │  [ input ▸ ] │
+└──────────────────────────────────────────────┴──────────────┘
+                                                  360px (64 collapsed)
+
+MOBILE < 900px
+┌──────────────────────┐
+│ [≡]  מטעמים    (י״כ) │
+├──────────────────────┤
+│  single column       │
+│  padding 16          │
+│                  (◉) │  ← FAB opens bottom sheet 78vh
+└──────────────────────┘</pre>
+  <table class="spec"><thead><tr><th>רוחב</th><th>שינוי</th></tr></thead><tbody>
+    <tr><td><code>≥ 1280</code></td><td>פריסה מלאה, ניווט עם כל הקישורים</td></tr>
+    <tr><td><code>&lt; 1100</code></td><td>הניווט עובר לתפריט צד (המבורגר), גריד 4 → 2, העוזר 320px</td></tr>
+    <tr><td><code>&lt; 900</code></td><td>עמודה אחת, העוזר הופך לכפתור צף וחלון תחתון, סרגלים צדדיים יורדים מעל התוכן</td></tr>
+    <tr><td><code>&lt; 640</code></td><td>כרטיסים ברוחב מלא, הגלגל מעל המצרכים, כפתורי מצב בישול ברוחב חצי מסך כל אחד</td></tr>
+  </tbody></table>
+</section>
+
+<section id="motion">
+  <h2>תנועה</h2>
+  <p>תנועה רק כשהיא עונה על פעולה או מספרת מה השתנה. עקומה אחת לכל האתר: <code>cubic-bezier(.2,.8,.2,1)</code>.</p>
+  <table class="spec"><thead><tr><th>רגע</th><th>תנועה</th><th>משך</th></tr></thead><tbody>
+    <tr><td>סיבוב הגלגל</td><td>4–5 סיבובים עם האטה הדרגתית, ואז חשיפת המצרכים בהיפוך אחד-אחד</td><td>3.2s + 3×380ms</td></tr>
+    <tr><td>מיזוג</td><td>שני הכרטיסים נעים למרכז ונבלעים, הכפתור פועם פעמיים</td><td>1.8s</td></tr>
+    <tr><td>מעבר שלב בבישול</td><td>החלקה בכיוון הקריאה (משמאל בעברית)</td><td>450ms</td></tr>
+    <tr><td>חלונות</td><td>עלייה של 16px ודהייה</td><td>300ms</td></tr>
+    <tr><td>ריחוף כרטיס</td><td>עלייה 4px וצל</td><td>250ms</td></tr>
+  </tbody></table>
+  <p style="margin-top:12px">עם <code>prefers-reduced-motion</code>: כל האנימציות מתקצרות כמעט לאפס. הגלגל מציג את המצרכים ישירות, בלי סיבוב.</p>
+</section>
+
+<section id="a11y">
+  <h2>נגישות</h2>
+  <ul>
+    <li>ניגודיות WCAG AA בכל צירוף טקסט-רקע (ראו יחסים בפרק הצבע).</li>
+    <li>פוקוס גלוי: טבעת זעפרן 3px בכל רכיב אינטראקטיבי.</li>
+    <li>הגלגל: <code>role="img"</code> עם תווית, והמצרכים שנבחרו באזור <code>aria-live</code>. כפתור "סובבו" נגיש במקלדת.</li>
+    <li>כרטיסי המיזוג הם כפתורים עם <code>aria-pressed</code>; גרירה היא קיצור דרך בלבד, הקשה עובדת תמיד.</li>
+    <li>מצב בישול: חיצים במקלדת, החלקה, כפתורים בגובה 60px, טיימרים מוכרזים בקול ובוויזואליה.</li>
+    <li>כל חלון סוגר ב-Escape ומחזיר פוקוס. Toasts באזור <code>role="status"</code>.</li>
+  </ul>
+</section>
+
+<section id="i18n">
+  <h2>עברית ואנגלית</h2>
+  <p>כל הפריסה כתובה ב-CSS logical properties (<code>margin-inline-start</code>, <code>inset-inline-end</code>), ולכן החלפת <code>dir</code> על <code>&lt;html&gt;</code> הופכת את כל המסך בלי קוד נוסף. מה שכן משתנה ידנית:</p>
+  <ul>
+    <li>חיצי ניווט ואייקוני "הבא/הקודם" מתהפכים (<code>transform: scaleX(-1)</code> ב-LTR).</li>
+    <li>החלקה במצב בישול וכיוון אנימציית המיזוג מתהפכים לפי השפה.</li>
+    <li>מקשי החיצים: בעברית שמאלה = הבא, באנגלית ימינה = הבא.</li>
+    <li>באנגלית: Frank Ruhl Libre נשאר לכותרות (יש לו לטינית), IBM Plex Sans לגוף.</li>
+    <li>מתכון מוצג בשפה שבה נוצר, גם אם שפת הממשק שונה; כיוון הבלוק של המתכון נקבע לפי <code>recipe.language</code>.</li>
+  </ul>
+</section>
+
+<section id="screens">
+  <h2>הנחיות לכל מסך</h2>
+  <table class="spec"><thead><tr><th>מסך</th><th>הרגע הבולט</th><th>הערות מימוש</th></tr></thead><tbody>
+    <tr><td><a class="link" href="../index.html">בית</a></td><td>מכונת מזל עם שלושה גלילים בתוך ה-Hero</td><td>ההדגמה רצה בצד הלקוח בלבד ולא צורכת מכסה. מתכונים אחרונים עם סינון כשרות.</td></tr>
+    <tr><td><a class="link" href="../wheel.html">גלגל האתגר</a></td><td>גלגל SVG עם 12 פלחים בצבעי הכשרות שנבחרה</td><td>הפלחים נצבעים לפי סוג הכשרות. ⟳ ליד כל מצרך. "צור מתכון" לא זמין עד שיש 3 מצרכים.</td></tr>
+    <tr><td><a class="link" href="../fusion.html">מיזוג מטבחים</a></td><td>אזור מיזוג כהה עם שני חריצים וכפתור "מזג!"</td><td>גרירה במחשב, הקשה בכל מקום. תוצאה עם שני כרטיסי "מה הגיע מכל מטבח" והערה כשמצרך הוחלף בגלל כשרות.</td></tr>
+    <tr><td><a class="link" href="../menu-planner.html">מתכנן תפריט</a></td><td>כרטיסי מנות שמגיעים אחד-אחד</td><td>"הצע מנה אחרת" בכל כרטיס. הודעת "פנו לרב" קבועה. "צור מתכונים" מראה התקדמות לכל מנה בנפרד.</td></tr>
+    <tr><td><a class="link" href="../menu.html">תפריט</a></td><td>באנר חציל עם פרטי הסעודה</td><td>מנות לפי סדר הגשה, לוח זמנים בשלוש שכבות (יום לפני / בבוקר / לפני ההגשה).</td></tr>
+    <tr><td><a class="link" href="../recipe.html">עמוד מתכון</a></td><td>איור ענק וכותרת Display</td><td>סרגל כלים דביק: מנות, המרה, "אין לי". מצרך שהוחלף מסומן בזעפרן עם המקור מחוק. <code>?servings=</code> בכתובת.</td></tr>
+    <tr><td><a class="link" href="../cook.html">מצב בישול</a></td><td>טקסט השלב בגודל עד 51px על חציל כהה</td><td>Wake Lock, טיימרים מקבילים בפס תחתון, הקראה עם בורר מהירות 0.75–1.25.</td></tr>
+    <tr><td><a class="link" href="../shopping.html">רשימות קניות</a></td><td>טבעת התקדמות</td><td>פריט שסומן יורד לתחתית המחלקה. "בבית" לפריטים קבועים. לחיצה על פריט מראה מאילו מתכונים הגיע.</td></tr>
+    <tr><td><a class="link" href="../favorites.html">מועדפים</a></td><td>ערימת צלחות בכרטיס תפריט</td><td>שלוש לשוניות: מתכונים, תפריטים, היסטוריה.</td></tr>
+    <tr><td><a class="link" href="../login.html">התחברות</a> / <a class="link" href="../register.html">הרשמה</a></td><td>חצי מסך חציל עם היתרונות</td><td>"להמשיך כאורח" תמיד זמין. בהרשמה: כשרות ברירת מחדל.</td></tr>
+    <tr><td><a class="link" href="../admin.html">ניהול</a></td><td>מונה "ממתינים" אדום בתפריט הצד</td><td>לוח בקרה, מאגרים, מילונים עם תור אישור, מכסות שנשמרות ללא פריסה.</td></tr>
+  </tbody></table>
+</section>
+
+<section id="copy">
+  <h2>כתיבה ומונחים</h2>
+  <p>פנייה ברבים ("סובבו", "בחרו"), משפטים קצרים, פעלים ברורים. כפתור אומר מה יקרה, והאישור משתמש באותה מילה.</p>
+  <table class="spec"><thead><tr><th>להשתמש</th><th>לא להשתמש</th><th>למה</th></tr></thead><tbody>
+    <tr><td>צור מתכון</td><td>שלח, Generate</td><td>אומר מה מתקבל</td></tr>
+    <tr><td>אין לי</td><td>החלף מצרך, Substitute</td><td>השפה של מי שעומד מול המקרר</td></tr>
+    <tr><td>המרת סוג כשרות</td><td>המרה לכשר</td><td>כל המתכונים כשרים; משתנה רק הסוג</td></tr>
+    <tr><td>מצב בישול</td><td>Cook mode, מצב מטבח</td><td>שם אחד בכל המקומות</td></tr>
+    <tr><td>יצירה מחדש</td><td>Retry, נסה שוב מאוחר יותר</td><td>פעולה מיידית ולא דחייה</td></tr>
+    <tr><td>לשאלות הלכתיות יש לפנות לרב</td><td>כל הנחיה הלכתית</td><td>המערכת אינה פוסקת</td></tr>
+  </tbody></table>
+</section>
+
+<section id="handoff">
+  <h2>מסירה לפיתוח</h2>
+  <p>כל הטוקנים נמצאים ב-<a class="link" href="design-tokens.json">design-tokens.json</a> וב-<code>:root</code> של <code>assets/css/styles.css</code>. מיפוי מוצע לרכיבי React:</p>
+  <table class="spec"><thead><tr><th>רכיב</th><th>Props עיקריים</th><th>מקור באב-הטיפוס</th></tr></thead><tbody>
+    <tr><td><code>&lt;KashrutChip&gt;</code></td><td><code>type: 'meat'|'dairy'|'parve'</code></td><td><code>.k-chip</code></td></tr>
+    <tr><td><code>&lt;KashrutPicker&gt;</code></td><td><code>value, onChange, allowed?</code></td><td><code>.seg</code></td></tr>
+    <tr><td><code>&lt;DishArt&gt;</code></td><td><code>emoji, hue, garnish[], size, src?</code></td><td><code>.art</code></td></tr>
+    <tr><td><code>&lt;RecipeCard&gt;</code></td><td><code>recipe, source, isFavorite</code></td><td><code>.recipe-card</code></td></tr>
+    <tr><td><code>&lt;StreamingRecipe&gt;</code></td><td><code>sse stream, onValidated, onRejected</code></td><td><code>.gen</code></td></tr>
+    <tr><td><code>&lt;ChallengeWheel&gt;</code></td><td><code>ingredients, kashrut, onResult</code></td><td><code>.wheel-svg</code></td></tr>
+    <tr><td><code>&lt;CuisineMixer&gt;</code></td><td><code>cuisines, selected[2], onMerge</code></td><td><code>.mixer, .cuisine</code></td></tr>
+    <tr><td><code>&lt;ServingsStepper&gt;</code></td><td><code>min 1, max 40, syncs ?servings</code></td><td><code>.stepper</code></td></tr>
+    <tr><td><code>&lt;AssistantPanel&gt;</code></td><td><code>context, onAction(tool, args)</code></td><td><code>.assistant</code></td></tr>
+    <tr><td><code>&lt;CookStep&gt; / &lt;TimerBar&gt;</code></td><td><code>step, ingredients, timers[]</code></td><td><code>.cook-*</code>, <code>.tchip</code></td></tr>
+  </tbody></table>
+</section>
+</article>
+</div>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/app.js"></script>
+<script>
+document.getElementById('lg').innerHTML=MT.LOGO+'<span>מטעמים</span>';
+document.getElementById('artDemo').innerHTML=['r1','r2','r9','r4','r6','r11','r8','r10'].map(id=>`<div style="border-radius:18px;overflow:hidden">${MT.art(MT.recipes.find(r=>r.id===id))}</div>`).join('');
+document.getElementById('cardDemo').innerHTML=['r3','r10','r6'].map(id=>MT.card(MT.recipes.find(r=>r.id===id))).join('');
+document.querySelectorAll('#cardDemo a').forEach(a=>a.setAttribute('href','../'+a.getAttribute('href')));
+</script>
+</body>
+</html>

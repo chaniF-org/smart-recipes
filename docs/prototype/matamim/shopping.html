@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>רשימות קניות · מטעמים</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div id="content">
+  <div class="page-head">
+    <div><nav class="crumbs" aria-label="פירורי לחם"><a href="index.html">בית</a><span>/</span><span>רשימות קניות</span></nav>
+      <h1>רשימות קניות</h1><p>הכמויות מאוחדות מכל המתכונים, ממוינות לפי מחלקות בסופר.</p></div>
+    <button class="btn btn-primary" id="newList">+ רשימה חדשה</button>
+  </div>
+
+  <div class="shop">
+    <aside class="panel lists" aria-label="הרשימות שלי">
+      <a href="#" aria-current="true"><span>🕯️ ליל שבת · 12 סועדים</span><small>27</small></a>
+      <a href="#"><span>🛒 קניות שבועיות</span><small>14</small></a>
+      <a href="#"><span>🎂 עוגות לשבת</span><small>9</small></a>
+      <div style="border-top:1px solid var(--line);margin:8px 6px;padding-top:12px">
+        <div class="label" style="padding-inline:8px;margin-bottom:6px">יש לי תמיד בבית</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;padding-inline:8px"><span class="tag">מלח</span><span class="tag">שמן זית</span><span class="tag">סוכר</span><span class="tag">פלפל שחור</span><button class="tag" style="cursor:pointer;border-style:dashed">+ הוספה</button></div>
+      </div>
+    </aside>
+
+    <section class="panel shop-main">
+      <div class="shop-head">
+        <div style="display:flex;gap:var(--s4);align-items:center">
+          <div class="ring" id="ring" style="--p:11"><span id="pct">11%</span></div>
+          <div><h2>ליל שבת · 12 סועדים</h2><p class="hint">מ-5 מתכונים · <a class="link" href="menu.html">לתפריט</a> · עודכן לפני 3 דקות</p></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" id="copy"></button>
+          <button class="btn btn-ghost btn-sm" id="share"></button>
+          <button class="btn btn-ghost btn-sm" onclick="window.print()" id="print"></button>
+        </div>
+      </div>
+      <div id="depts"></div>
+      <form class="add-item" id="addForm"><input class="input" id="addName" placeholder="הוספת פריט ידני, למשל: חלות" aria-label="שם פריט"><input class="input" id="addQty" placeholder="כמות" style="max-width:120px" aria-label="כמות"><button class="btn btn-primary">הוספה</button></form>
+    </section>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="fromModal" role="dialog" aria-modal="true" aria-labelledby="fmT">
+  <div class="modal"><div class="modal-head"><h3 id="fmT"></h3><button class="x" data-close aria-label="סגירה">✕</button></div>
+    <div class="modal-body"><p class="hint" style="margin-bottom:10px">הפריט הגיע מהמתכונים:</p><div id="fmList" style="display:flex;flex-direction:column;gap:8px"></div></div></div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+MT.mount('shopping');
+const $=s=>document.querySelector(s);
+$('#copy').innerHTML=MT.I.copy+' העתקה'; $('#share').innerHTML=MT.I.share+' שיתוף'; $('#print').innerHTML=MT.I.print+' הדפסה';
+const D=JSON.parse(JSON.stringify(MT.shopping));
+Object.values(D).forEach(d=>d.items.forEach(it=>it.checked=!!it.staple));
+function render(){
+  let tot=0,ch=0;
+  $('#depts').innerHTML=Object.entries(D).map(([k,d])=>{
+    const items=[...d.items].sort((a,b)=>a.checked-b.checked); tot+=items.length; ch+=items.filter(x=>x.checked).length;
+    return `<div class="dept"><h4><span class="di">${d.i}</span>${d.n}<small>${items.filter(x=>!x.checked).length} נותרו</small></h4>
+    ${items.map(it=>`<div class="item ${it.checked?'checked':''} ${it.staple?'staple':''}" data-d="${k}" data-n="${it.n}">
+      <input type="checkbox" ${it.checked?'checked':''} aria-label="${it.n}">
+      <button style="border:0;background:none;text-align:start;padding:0" data-from><span class="nm">${it.n}</span><span class="from">${it.from.join(' · ')}</span></button>
+      <span class="q">${it.q}</span><button class="del" aria-label="מחיקת ${it.n}">✕</button></div>`).join('')}</div>`;}).join('');
+  const p=Math.round(ch/tot*100); $('#ring').style.setProperty('--p',p); $('#pct').textContent=p+'%';
+}
+render();
+const find=el=>{const r=el.closest('.item');return [r.dataset.d, D[r.dataset.d].items.find(x=>x.n===r.dataset.n)];};
+$('#depts').addEventListener('change',e=>{const [,it]=find(e.target); it.checked=e.target.checked; setTimeout(render,250);});
+$('#depts').addEventListener('click',e=>{
+  if(e.target.closest('.del')){const [d,it]=find(e.target); D[d].items=D[d].items.filter(x=>x!==it); render(); MT.toast(`${it.n} הוסר מהרשימה`,'🗑');}
+  if(e.target.closest('[data-from]')){const [,it]=find(e.target); $('#fmT').textContent=it.n+' · '+it.q; $('#fmList').innerHTML=it.from.map(f=>`<a class="tag" href="recipe.html" style="padding:10px 14px">🍽️ ${f}</a>`).join(''); MT.modal('fromModal');}
+});
+$('#addForm').addEventListener('submit',async e=>{e.preventDefault(); const n=$('#addName').value.trim(); if(!n) return; const q=$('#addQty').value.trim()||'1';
+  const known={'חלות':'bakery','לחם':'bakery','חלב':'other','עגבניות':'produce','מלפפונים':'produce','קמח':'pantry'};
+  let d=known[n]; if(!d){ MT.toast('מסווג את הפריט למחלקה…','✨'); await MT.wait(700); d='other'; }
+  (D[d]||D.other).items.unshift({n,q,from:['ידני']}); $('#addName').value='';$('#addQty').value=''; render(); MT.toast(`${n} נוסף ל${(D[d]||D.other).n}`,'＋');});
+$('#copy').addEventListener('click',async()=>{const txt=Object.values(D).map(d=>d.n+':\n'+d.items.filter(x=>!x.checked).map(x=>`- ${x.n} ${x.q}`).join('\n')).join('\n\n'); try{await navigator.clipboard.writeText(txt)}catch(e){} MT.toast('הרשימה הועתקה כטקסט','📋');});
+$('#share').addEventListener('click',async()=>{ if(navigator.share){try{await navigator.share({title:'רשימת קניות',text:'ליל שבת · 12 סועדים'})}catch(e){}} else MT.toast('שיתוף זמין במובייל · הרשימה הועתקה','🔗'); });
+$('#newList').addEventListener('click',()=>MT.toast('רשימה חדשה נוצרה','＋'));
+document.querySelectorAll('.lists a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.lists a').forEach(x=>x.removeAttribute('aria-current'));a.setAttribute('aria-current','true');}));
+</script>
+</body>
+</html>
